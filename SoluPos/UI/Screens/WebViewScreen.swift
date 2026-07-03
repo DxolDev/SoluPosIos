@@ -173,10 +173,12 @@ struct WebViewScreen: View {
             .first?.keyWindow?.safeAreaInsets.bottom ?? 0
     }
 
-    // Cierra el teclado del WebView: quita el foco del input HTML (blur) y
-    // fuerza el resign del first responder nativo.
+    // Cierra el teclado del WebView: primero RECUERDA el campo activo (para
+    // devolver ahí el código escaneado), luego le quita el foco (blur) y fuerza
+    // el resign del first responder nativo.
     private func dismissKeyboard() {
         webView?.evaluateJavaScript(
+            BarcodeInjector.rememberScanTargetScript +
             "if (document.activeElement) document.activeElement.blur();",
             completionHandler: nil
         )

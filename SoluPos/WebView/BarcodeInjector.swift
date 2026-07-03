@@ -1,6 +1,18 @@
 import Foundation
 
 enum BarcodeInjector {
+    // Antes de abrir el escáner cerramos el teclado (blur del input activo),
+    // lo que borra document.activeElement. Este script recuerda cuál era el
+    // campo activo en window.__posScanTarget para restaurarlo al inyectar.
+    static let rememberScanTargetScript = """
+    (function() {
+        var el = document.activeElement;
+        if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
+            window.__posScanTarget = el;
+        }
+    })();
+    """
+
     // Puerto directo de BarcodeInjector.kt: simula teclado físico
     // (keydown/keypress/input/keyup + Enter) para que los POS que detectan
     // el patrón de eventos reciban el código correctamente.
@@ -10,7 +22,12 @@ enum BarcodeInjector {
             .replacingOccurrences(of: "'", with: "\\'")
         return """
         (function(value) {
-            var el = document.activeElement;
+            // Prioridad: el campo recordado antes de abrir el escáner;
+            // si no, el activeElement; si no, el primer input de texto.
+            var el = window.__posScanTarget;
+            if (!el || !el.isConnected || (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA')) {
+                el = document.activeElement;
+            }
             if (!el || (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA')) {
                 el = document.querySelector(
                     'input[type="text"]:not([disabled]):not([readonly]),' +
@@ -19,6 +36,7 @@ enum BarcodeInjector {
                 );
             }
             if (!el) return;
+            window.__posScanTarget = null;
             el.focus();
             var nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
             function fireKey(type, key, keyCode) {
