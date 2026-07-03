@@ -109,7 +109,7 @@ struct StoreFormView: View {
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(Color.brandDark, for: .navigationBar)
+            .toolbarBackground(Color.heroTop, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

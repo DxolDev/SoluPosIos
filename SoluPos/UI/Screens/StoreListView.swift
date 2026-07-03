@@ -1,12 +1,14 @@
 import SwiftUI
 import SwiftData
 
-// MARK: - Brand colors
+// MARK: - Brand colors (colores exactos del Android)
 extension Color {
-    static let brandDark   = Color(red: 0.08, green: 0.14, blue: 0.55)  // #142390
-    static let brandMid    = Color(red: 0.10, green: 0.20, blue: 0.70)  // #1A33B3
-    static let brandBlue   = Color(red: 0.15, green: 0.33, blue: 0.92)  // #2655EB
-    static let listBg      = Color(red: 0.95, green: 0.95, blue: 0.97)
+    static let heroTop     = Color(red: 0.016, green: 0.106, blue: 0.302) // #041B4D
+    static let heroBottom  = Color(red: 0.043, green: 0.180, blue: 0.510) // #0B2E82
+    static let storeIcon   = Color(red: 0.008, green: 0.129, blue: 0.639) // #0221A3
+    static let brandBlue   = Color(red: 0.084, green: 0.271, blue: 0.753) // #1565C0 Blue800
+    static let brandDark   = Color(red: 0.016, green: 0.106, blue: 0.302) // #041B4D = heroTop
+    static let listBg      = Color(red: 0.96, green: 0.96, blue: 0.98)
 }
 
 struct StoreListView: View {
@@ -56,7 +58,7 @@ struct StoreListView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color.brandDark, for: .navigationBar)
+        .toolbarBackground(Color.heroTop, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -120,21 +122,22 @@ struct StoreListView: View {
     private var heroHeader: some View {
         ZStack {
             LinearGradient(
-                colors: [Color.brandDark, Color.brandMid],
+                colors: [Color.heroTop, Color.heroBottom],
                 startPoint: .top,
                 endPoint: .bottom
             )
-            VStack(spacing: 6) {
+            VStack(spacing: 8) {
                 Image("Logo")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 60)
+                    .frame(height: 56)
                 Text("La solución completa para tu punto de venta")
-                    .font(.subheadline)
-                    .foregroundStyle(.white.opacity(0.85))
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
             }
             .padding(.vertical, 28)
-            .padding(.horizontal)
+            .padding(.horizontal, 24)
         }
         .frame(maxWidth: .infinity)
     }
@@ -190,10 +193,10 @@ private struct StoreCard: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            // Avatar círculo azul
+            // Avatar círculo azul (#0221A3 del Android)
             ZStack {
                 Circle()
-                    .fill(Color.brandBlue)
+                    .fill(Color.storeIcon)
                     .frame(width: 52, height: 52)
                 Image(systemName: "storefront.fill")
                     .font(.system(size: 22))
@@ -202,12 +205,12 @@ private struct StoreCard: View {
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(store.name)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 15, weight: .bold))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                 Text(store.url)
                     .font(.system(size: 13))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.brandBlue)  // azul primario como Android
                     .lineLimit(1)
             }
 
