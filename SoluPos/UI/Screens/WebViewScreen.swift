@@ -64,7 +64,7 @@ struct WebViewScreen: View {
                 }
             }
         }
-        .sheet(isPresented: $showScanner) {
+        .fullScreenCover(isPresented: $showScanner) {
             ScannerView(
                 onResult: { barcode in
                     showScanner = false
@@ -110,6 +110,9 @@ struct WebViewScreen: View {
             // El botón "volver a tiendas" del Android es innecesario en iOS:
             // el NavigationStack ya provee el botón atrás nativo (chevron).
             Button {
+                // Cerrar el teclado antes de abrir el escáner (como Android),
+                // si no el teclado del WebView tapa la cámara.
+                dismissKeyboard()
                 showScanner = true
             } label: {
                 Image(systemName: "barcode.viewfinder")
@@ -155,6 +158,19 @@ struct WebViewScreen: View {
 
     private func injectBarcode(_ barcode: String) {
         webView?.evaluateJavaScript(BarcodeInjector.buildScript(barcode: barcode), completionHandler: nil)
+    }
+
+    // Cierra el teclado del WebView: quita el foco del input HTML (blur) y
+    // fuerza el resign del first responder nativo.
+    private func dismissKeyboard() {
+        webView?.evaluateJavaScript(
+            "if (document.activeElement) document.activeElement.blur();",
+            completionHandler: nil
+        )
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil, from: nil, for: nil
+        )
     }
 
     // MARK: - Outcome snackbar
