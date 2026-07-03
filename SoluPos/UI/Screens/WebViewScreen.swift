@@ -48,7 +48,22 @@ struct WebViewScreen: View {
         }
         .navigationTitle(store.name)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(false)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    // Como Android: retroceder dentro del POS primero;
+                    // salir a la lista de tiendas solo si no hay historial.
+                    if let wv = webView, wv.canGoBack {
+                        wv.goBack()
+                    } else {
+                        dismiss()
+                    }
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+            }
+        }
         .sheet(isPresented: $showScanner) {
             ScannerView(
                 onResult: { barcode in
@@ -92,17 +107,8 @@ struct WebViewScreen: View {
 
     private var floatingButtons: some View {
         VStack(spacing: 12) {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "storefront")
-                    .font(.title2)
-                    .frame(width: 50, height: 50)
-                    .background(.ultraThinMaterial)
-                    .clipShape(Circle())
-                    .shadow(radius: 4)
-            }
-
+            // El botón "volver a tiendas" del Android es innecesario en iOS:
+            // el NavigationStack ya provee el botón atrás nativo (chevron).
             Button {
                 showScanner = true
             } label: {
@@ -244,9 +250,9 @@ struct WebViewTutorialOverlay: View {
                     )
                     Divider()
                     tutorialStep(
-                        icon: "storefront",
-                        title: "Cambiar tienda",
-                        body: "Toca el botón de tienda para volver al listado y cambiar de POS."
+                        icon: "chevron.left",
+                        title: "Volver",
+                        body: "Usa el botón atrás para retroceder dentro del POS; si ya estás al inicio, vuelves a la lista de tiendas."
                     )
                     Button("Entendido") { onDismiss() }
                         .buttonStyle(.borderedProminent)
