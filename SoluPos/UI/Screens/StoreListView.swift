@@ -33,17 +33,17 @@ struct StoreListView: View {
                 }
             }
 
-            // FAB
+            // FAB — rectángulo redondeado igual que Android
             Button {
                 showAddForm = true
             } label: {
                 Image(systemName: "plus")
-                    .font(.system(size: 22, weight: .semibold))
+                    .font(.system(size: 24, weight: .semibold))
                     .foregroundStyle(.white)
-                    .frame(width: 60, height: 60)
+                    .frame(width: 64, height: 64)
                     .background(Color.brandBlue)
-                    .clipShape(Circle())
-                    .shadow(color: Color.brandBlue.opacity(0.5), radius: 8, x: 0, y: 4)
+                    .clipShape(RoundedRectangle(cornerRadius: 18))
+                    .shadow(color: Color.brandBlue.opacity(0.4), radius: 8, x: 0, y: 4)
             }
             .padding(.trailing, 20)
             .padding(.bottom, 28)
@@ -61,23 +61,27 @@ struct StoreListView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("Mis Tiendas")
-                    .font(.headline)
+                    .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(.white)
             }
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    PrinterSettingsView()
-                } label: {
-                    Image(systemName: "printer")
-                        .foregroundStyle(.white)
-                }
-            }
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    showTutorial = true
-                } label: {
-                    Image(systemName: "line.3.horizontal")
-                        .foregroundStyle(.white)
+                HStack(spacing: 8) {
+                    Button {
+                        showTutorial = true
+                    } label: {
+                        Image(systemName: "questionmark.circle")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.white)
+                    }
+                    .buttonStyle(.plain)
+                    NavigationLink {
+                        PrinterSettingsView()
+                    } label: {
+                        Image(systemName: "printer")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.white)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
         }
@@ -223,9 +227,8 @@ private struct StoreCard: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.white)
+        .background(Color(red: 0.93, green: 0.93, blue: 0.95))   // gris claro como Android
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 2)
         .contentShape(Rectangle())
         .onTapGesture(perform: onOpen)
     }
