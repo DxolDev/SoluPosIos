@@ -1,12 +1,13 @@
 import SwiftUI
 import SwiftData
 
-// MARK: - Brand colors (colores exactos del Android)
+// MARK: - Brand colors (colores exactos del Android — Color.kt)
 extension Color {
-    static let heroTop     = Color(red: 0.016, green: 0.106, blue: 0.302) // #041B4D
-    static let heroBottom  = Color(red: 0.043, green: 0.180, blue: 0.510) // #0B2E82
-    static let storeIcon   = Color(red: 0.008, green: 0.129, blue: 0.639) // #0221A3
+    static let heroTop     = Color(red: 0.016, green: 0.106, blue: 0.302) // #041B4D HeroGradientTop
+    static let heroBottom  = Color(red: 0.043, green: 0.180, blue: 0.510) // #0B2E82 HeroGradientBottom
+    static let storeIcon   = Color(red: 0.008, green: 0.129, blue: 0.639) // #0221A3 StoreIconBlue
     static let brandBlue   = Color(red: 0.084, green: 0.271, blue: 0.753) // #1565C0 Blue800
+    static let blue100     = Color(red: 0.733, green: 0.871, blue: 0.984) // #BBDEFB Blue100 (FAB)
     static let brandDark   = Color(red: 0.016, green: 0.106, blue: 0.302) // #041B4D = heroTop
     static let listBg      = Color(red: 0.96, green: 0.96, blue: 0.98)
 }
@@ -27,7 +28,12 @@ struct StoreListView: View {
             Color.listBg.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                heroHeader
+                // Barra superior azul + hero forman un bloque continuo
+                VStack(spacing: 0) {
+                    topBar
+                    heroHeader
+                }
+
                 if stores.isEmpty {
                     emptyState
                 } else {
@@ -35,17 +41,17 @@ struct StoreListView: View {
                 }
             }
 
-            // FAB — rectángulo redondeado igual que Android
+            // FAB azul claro (Material3 primaryContainer) con "+" azul oscuro
             Button {
                 showAddForm = true
             } label: {
                 Image(systemName: "plus")
-                    .font(.system(size: 24, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 64, height: 64)
-                    .background(Color.brandBlue)
+                    .font(.system(size: 26, weight: .regular))
+                    .foregroundStyle(Color.brandBlue)
+                    .frame(width: 60, height: 60)
+                    .background(Color.blue100)
                     .clipShape(RoundedRectangle(cornerRadius: 18))
-                    .shadow(color: Color.brandBlue.opacity(0.4), radius: 8, x: 0, y: 4)
+                    .shadow(color: .black.opacity(0.22), radius: 6, x: 0, y: 3)
             }
             .padding(.trailing, 20)
             .padding(.bottom, 28)
@@ -57,36 +63,8 @@ struct StoreListView: View {
                 })
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color.heroTop, for: .navigationBar)
-        .toolbarColorScheme(.dark, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("Mis Tiendas")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                HStack(spacing: 8) {
-                    Button {
-                        showTutorial = true
-                    } label: {
-                        Image(systemName: "questionmark.circle")
-                            .font(.system(size: 20))
-                            .foregroundStyle(.white)
-                    }
-                    .buttonStyle(.plain)
-                    NavigationLink {
-                        PrinterSettingsView()
-                    } label: {
-                        Image(systemName: "printer")
-                            .font(.system(size: 20))
-                            .foregroundStyle(.white)
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-        }
+        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showAddForm) {
             StoreFormView()
         }
@@ -117,29 +95,62 @@ struct StoreListView: View {
         }
     }
 
-    // MARK: - Hero header
+    // MARK: - Barra superior custom (azul continuo con el hero)
+
+    private var topBar: some View {
+        HStack(spacing: 12) {
+            Text("Mis Tiendas")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(.white)
+
+            Spacer()
+
+            Button {
+                showTutorial = true
+            } label: {
+                Image(systemName: "questionmark.circle")
+                    .font(.system(size: 22))
+                    .foregroundStyle(.white)
+            }
+
+            NavigationLink {
+                PrinterSettingsView()
+            } label: {
+                Image(systemName: "printer")
+                    .font(.system(size: 22))
+                    .foregroundStyle(.white)
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 6)
+        .padding(.bottom, 8)
+        .background(Color.heroTop.ignoresSafeArea(edges: .top))
+    }
+
+    // MARK: - Hero header (compacto, logo grande)
 
     private var heroHeader: some View {
-        ZStack {
+        VStack(spacing: 10) {
+            Image("Logo")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 36)
+            Text("La solución completa para tu punto de venta")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.top, 12)
+        .padding(.bottom, 26)
+        .frame(maxWidth: .infinity)
+        .background(
             LinearGradient(
                 colors: [Color.heroTop, Color.heroBottom],
                 startPoint: .top,
                 endPoint: .bottom
             )
-            VStack(spacing: 8) {
-                Image("Logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 56)
-                Text("La solución completa para tu punto de venta")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(.vertical, 28)
-            .padding(.horizontal, 24)
-        }
-        .frame(maxWidth: .infinity)
+        )
     }
 
     // MARK: - Store list
@@ -170,10 +181,10 @@ struct StoreListView: View {
             Image(systemName: "storefront")
                 .font(.system(size: 60))
                 .foregroundStyle(Color.brandBlue.opacity(0.4))
-            Text("No hay tiendas configuradas")
+            Text("No hay tiendas guardadas.")
                 .font(.headline)
                 .foregroundStyle(.secondary)
-            Text("Toca el botón + para agregar tu primera tienda.")
+            Text("Toca + para agregar una.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -210,7 +221,7 @@ private struct StoreCard: View {
                     .lineLimit(1)
                 Text(store.url)
                     .font(.system(size: 13))
-                    .foregroundStyle(Color.brandBlue)  // azul primario como Android
+                    .foregroundStyle(Color.brandBlue)
                     .lineLimit(1)
             }
 
@@ -230,7 +241,7 @@ private struct StoreCard: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color(red: 0.93, green: 0.93, blue: 0.95))   // gris claro como Android
+        .background(Color(red: 0.93, green: 0.93, blue: 0.95))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .contentShape(Rectangle())
         .onTapGesture(perform: onOpen)
