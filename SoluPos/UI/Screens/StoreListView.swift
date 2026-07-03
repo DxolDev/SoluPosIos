@@ -86,23 +86,19 @@ struct StoreListView: View {
     }
 
     private var heroHeader: some View {
-        VStack(spacing: 4) {
-            Text("SoluPos")
-                .font(.largeTitle.bold())
-                .foregroundStyle(.white)
+        VStack(spacing: 8) {
+            Image("Logo")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 52)
             Text("La solución completa para tu punto de venta")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.85))
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 24)
-        .background(
-            LinearGradient(
-                colors: [Color.blue, Color.blue.opacity(0.7)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
+        .padding(.horizontal)
+        .background(Color.black)
     }
 
     private var storeList: some View {
