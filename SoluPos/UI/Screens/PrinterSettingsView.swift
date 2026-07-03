@@ -3,7 +3,7 @@ import CoreBluetooth
 
 struct PrinterSettingsView: View {
     @EnvironmentObject private var prefs: UserPreferences
-    @StateObject private var printerManager = BLEPrinterManager()
+    @EnvironmentObject private var printerManager: BLEPrinterManager
     @State private var testImage: UIImage?
 
     var body: some View {

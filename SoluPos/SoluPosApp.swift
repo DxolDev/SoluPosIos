@@ -5,6 +5,10 @@ import SwiftData
 struct SoluPosApp: App {
     let container: ModelContainer
 
+    // Instancia única compartida: la conexión BLE hecha en Ajustes debe estar
+    // disponible al imprimir desde el WebView.
+    @StateObject private var printerManager = BLEPrinterManager()
+
     init() {
         do {
             container = try ModelContainer(for: Store.self)
@@ -18,6 +22,7 @@ struct SoluPosApp: App {
             ContentView()
                 .modelContainer(container)
                 .environmentObject(UserPreferences.shared)
+                .environmentObject(printerManager)
         }
     }
 }

@@ -54,10 +54,15 @@ enum BarcodeInjector {
     }
 
     // Arregla el bug del POS: el botón llama print_receipt() que no existe.
-    // Redirige esa función al handler nativo de iOS.
+    // Redirige esa función (y window.print, por si el POS la llama directo)
+    // al handler nativo de iOS.
     static let printReceiptFixScript = """
-    window.print_receipt = function() {
-        window.webkit.messageHandlers.print.postMessage({});
-    };
+    (function() {
+        function nativePrint() {
+            window.webkit.messageHandlers.print.postMessage({});
+        }
+        window.print_receipt = nativePrint;
+        window.print = nativePrint;
+    })();
     """
 }

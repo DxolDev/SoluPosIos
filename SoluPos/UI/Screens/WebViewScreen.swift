@@ -16,7 +16,7 @@ struct WebViewScreen: View {
     @State private var previewImage: UIImage?
 
     private let printHandler = PrintMessageHandler()
-    @StateObject private var printerManager = BLEPrinterManager()
+    @EnvironmentObject private var printerManager: BLEPrinterManager
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
