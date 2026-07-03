@@ -130,9 +130,10 @@ struct WebViewScreen: View {
             // El botón "volver a tiendas" del Android es innecesario en iOS:
             // el NavigationStack ya provee el botón atrás nativo (chevron).
             Button {
-                // Cerrar el teclado antes de abrir el escáner (como Android),
-                // si no el teclado del WebView tapa la cámara.
-                dismissKeyboard()
+                // Cerrar el teclado antes de abrir el escáner (si no tapa la
+                // cámara). El campo enfocado ya quedó guardado por el listener
+                // focusin, así que no perdemos el destino del escaneo.
+                closeKeyboard()
                 showScanner = true
             } label: {
                 Image(systemName: "barcode.viewfinder")
@@ -244,15 +245,10 @@ struct WebViewScreen: View {
             .first?.keyWindow?.safeAreaInsets.bottom ?? 0
     }
 
-    // Cierra el teclado del WebView: primero RECUERDA el campo activo (para
-    // devolver ahí el código escaneado), luego le quita el foco (blur) y fuerza
-    // el resign del first responder nativo.
-    private func dismissKeyboard() {
-        webView?.evaluateJavaScript(
-            BarcodeInjector.rememberScanTargetScript +
-            "if (document.activeElement) document.activeElement.blur();",
-            completionHandler: nil
-        )
+    // Cierra el teclado nativo (para que no tape la cámara). No hace blur del
+    // input por JS: el listener focusin ya guardó el campo destino, y evitar el
+    // blur JS deja el foco lógico más estable al volver.
+    private func closeKeyboard() {
         UIApplication.shared.sendAction(
             #selector(UIResponder.resignFirstResponder),
             to: nil, from: nil, for: nil

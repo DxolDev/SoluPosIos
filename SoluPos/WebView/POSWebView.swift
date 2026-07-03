@@ -15,13 +15,22 @@ struct POSWebView: UIViewRepresentable {
         let config = WKWebViewConfiguration()
         config.userContentController.add(printHandler, name: "print")
 
-        // Inyectar el fix de print_receipt() y las variables del escáner en cada página
-        let userScript = WKUserScript(
+        // Inyectar el fix de print_receipt() en cada página
+        let printScript = WKUserScript(
             source: BarcodeInjector.printReceiptFixScript,
             injectionTime: .atDocumentEnd,
             forMainFrameOnly: false
         )
-        config.userContentController.addUserScript(userScript)
+        config.userContentController.addUserScript(printScript)
+
+        // Instalar el listener que recuerda el último input enfocado, para que
+        // el escáner sepa a qué campo devolver el código aunque el foco se pierda.
+        let focusScript = WKUserScript(
+            source: BarcodeInjector.focusTrackingScript,
+            injectionTime: .atDocumentEnd,
+            forMainFrameOnly: false
+        )
+        config.userContentController.addUserScript(focusScript)
 
         // Permitir media inline y JavaScript
         config.allowsInlineMediaPlayback = true

@@ -1,15 +1,20 @@
 import Foundation
 
 enum BarcodeInjector {
-    // Antes de abrir el escáner cerramos el teclado (blur del input activo),
-    // lo que borra document.activeElement. Este script recuerda cuál era el
-    // campo activo en window.__posScanTarget para restaurarlo al inyectar.
-    static let rememberScanTargetScript = """
+    // Al tocar el botón (nativo) del escáner, iOS le quita el foco al WebView y
+    // hace blur del input — para entonces ya es tarde para capturarlo. Por eso
+    // instalamos un listener que RECUERDA CONTINUAMENTE el último input
+    // enfocado en window.__posLastInput. Se inyecta al cargar cada página.
+    static let focusTrackingScript = """
     (function() {
-        var el = document.activeElement;
-        if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
-            window.__posScanTarget = el;
-        }
+        if (window.__posFocusTracking) return;
+        window.__posFocusTracking = true;
+        document.addEventListener('focusin', function(e) {
+            var t = e.target;
+            if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) {
+                window.__posLastInput = t;
+            }
+        }, true);
     })();
     """
 
@@ -38,9 +43,10 @@ enum BarcodeInjector {
             var iframes = document.querySelectorAll('iframe');
             var iframeCount = iframes.length;
 
-            // Prioridad 1: el campo recordado antes de abrir el escáner.
-            var el = window.__posScanTarget;
-            var source = 'remembered';
+            // Prioridad 1: el último input enfocado (capturado por el listener
+            // focusin antes de que el botón del escáner robara el foco).
+            var el = window.__posLastInput;
+            var source = 'lastInput';
             if (!isField(el) || !el.isConnected) { el = null; }
 
             // Prioridad 2: el activeElement actual.
@@ -68,7 +74,6 @@ enum BarcodeInjector {
             if (!el) {
                 return JSON.stringify({found:false, inputCount:inputCount, iframes:iframeCount});
             }
-            window.__posScanTarget = null;
             el.focus();
 
             var proto = el.tagName === 'TEXTAREA' ? window.HTMLTextAreaElement.prototype
