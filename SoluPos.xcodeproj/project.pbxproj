@@ -1,0 +1,439 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03B411C3BF8C32A566FBAF86 /* BLEPrinterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B3FAC27F21D5B4D512B05D /* BLEPrinterManager.swift */; };
+		0949538E29477790A0820046 /* StoreListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E890746997A4B56180FF75F /* StoreListView.swift */; };
+		102B2E25CF7A0CC66F2E91C0 /* POSWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E25E14E497EC18AADB4EB89 /* POSWebView.swift */; };
+		1CE5F6DFE3B454BD570EEB87 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09F8B7F5AA62CA4B5D26E74 /* ContentView.swift */; };
+		29D8215D21D6B11B88D09FCA /* SoluPosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2B768C5BD7A6132C4A01A4 /* SoluPosApp.swift */; };
+		3AF92BBEBB83A07675E59DDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8920642AE6AFCD299EDE304F /* Assets.xcassets */; };
+		4D91D8A3273C7EDA9B136AD4 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A749EB0ED10E8B3A78F3CF /* UserPreferences.swift */; };
+		658EB789D9BE193C5EDB82A7 /* WebViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB7AB988FD29B912E972E2 /* WebViewScreen.swift */; };
+		7F9F3DBECF4FA20DABC5F669 /* PrinterConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A35596A927EE88F0ADAA777 /* PrinterConnectionState.swift */; };
+		8796BE3FC743E28BA87704DD /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C79164B81287288B05DBB97 /* ScannerView.swift */; };
+		8A49C7689A71822252E96EB8 /* BarcodeInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC6FA26A014BF09C6DD07A /* BarcodeInjector.swift */; };
+		920D2E679B27D4AC1D42D954 /* PrintMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4751514B333373A06054067 /* PrintMessageHandler.swift */; };
+		9AC793EE8A78FAA00498B1AA /* StoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06984580B5B26381BBB171F7 /* StoreRepository.swift */; };
+		A1E27E1D32DF7697BAEF5496 /* TutorialOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF921CC1822CD43DBE8E159 /* TutorialOverlay.swift */; };
+		CB1EA9109CF9946E45BE4D3B /* PrinterSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DFBE52A3058AC7FBA3DF03 /* PrinterSettingsView.swift */; };
+		CED80279B5BB0A8EC872D408 /* ReceiptCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E6EA49F452A2851950508B /* ReceiptCapture.swift */; };
+		E0138767F0A087DE7FC92E07 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB32A37BFA5BF6A507D6D28 /* Store.swift */; };
+		FB70CFED8BAA559B393F71CA /* StoreFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7FEC69F925C066FA44709B /* StoreFormView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		06984580B5B26381BBB171F7 /* StoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRepository.swift; sourceTree = "<group>"; };
+		1A35596A927EE88F0ADAA777 /* PrinterConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterConnectionState.swift; sourceTree = "<group>"; };
+		23E6EA49F452A2851950508B /* ReceiptCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCapture.swift; sourceTree = "<group>"; };
+		24FC6FA26A014BF09C6DD07A /* BarcodeInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeInjector.swift; sourceTree = "<group>"; };
+		30B3FAC27F21D5B4D512B05D /* BLEPrinterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPrinterManager.swift; sourceTree = "<group>"; };
+		371EED4366BDEC4BB99B964F /* SoluPos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SoluPos.entitlements; sourceTree = "<group>"; };
+		3CB32A37BFA5BF6A507D6D28 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		3E25E14E497EC18AADB4EB89 /* POSWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POSWebView.swift; sourceTree = "<group>"; };
+		4FF921CC1822CD43DBE8E159 /* TutorialOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialOverlay.swift; sourceTree = "<group>"; };
+		5E7FEC69F925C066FA44709B /* StoreFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreFormView.swift; sourceTree = "<group>"; };
+		5E890746997A4B56180FF75F /* StoreListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListView.swift; sourceTree = "<group>"; };
+		75D0BDF68538E80A5BB29985 /* SoluPos.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SoluPos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8920642AE6AFCD299EDE304F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9C79164B81287288B05DBB97 /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
+		A09F8B7F5AA62CA4B5D26E74 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C0DFBE52A3058AC7FBA3DF03 /* PrinterSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterSettingsView.swift; sourceTree = "<group>"; };
+		E4751514B333373A06054067 /* PrintMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintMessageHandler.swift; sourceTree = "<group>"; };
+		E4EB7AB988FD29B912E972E2 /* WebViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewScreen.swift; sourceTree = "<group>"; };
+		EF2B768C5BD7A6132C4A01A4 /* SoluPosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoluPosApp.swift; sourceTree = "<group>"; };
+		EFD7C32A452772EAB07CB095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F4A749EB0ED10E8B3A78F3CF /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		322F39EB378B7E463E9EAF06 /* Printing */ = {
+			isa = PBXGroup;
+			children = (
+				30B3FAC27F21D5B4D512B05D /* BLEPrinterManager.swift */,
+				1A35596A927EE88F0ADAA777 /* PrinterConnectionState.swift */,
+				23E6EA49F452A2851950508B /* ReceiptCapture.swift */,
+			);
+			path = Printing;
+			sourceTree = "<group>";
+		};
+		3EF5E3F39C3F82C8FA9B3D99 /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				9C79164B81287288B05DBB97 /* ScannerView.swift */,
+			);
+			path = Scanner;
+			sourceTree = "<group>";
+		};
+		5505600C152BD6A4D41FA0D6 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				C0DFBE52A3058AC7FBA3DF03 /* PrinterSettingsView.swift */,
+				5E7FEC69F925C066FA44709B /* StoreFormView.swift */,
+				5E890746997A4B56180FF75F /* StoreListView.swift */,
+				E4EB7AB988FD29B912E972E2 /* WebViewScreen.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		7A03C83897FA2EF60348F36F /* SoluPos */ = {
+			isa = PBXGroup;
+			children = (
+				8920642AE6AFCD299EDE304F /* Assets.xcassets */,
+				EFD7C32A452772EAB07CB095 /* Info.plist */,
+				371EED4366BDEC4BB99B964F /* SoluPos.entitlements */,
+				EF2B768C5BD7A6132C4A01A4 /* SoluPosApp.swift */,
+				B5944111069805A2EF726C27 /* Data */,
+				322F39EB378B7E463E9EAF06 /* Printing */,
+				3EF5E3F39C3F82C8FA9B3D99 /* Scanner */,
+				9D876D316F5C510AC3A01B6B /* UI */,
+				FDE127B87F2AB0BD268A6A03 /* WebView */,
+			);
+			path = SoluPos;
+			sourceTree = "<group>";
+		};
+		89E3F13CC1982DA8DF4EC36A /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				4FF921CC1822CD43DBE8E159 /* TutorialOverlay.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		9210097B2263000170B1F3C3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				75D0BDF68538E80A5BB29985 /* SoluPos.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9D876D316F5C510AC3A01B6B /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A09F8B7F5AA62CA4B5D26E74 /* ContentView.swift */,
+				89E3F13CC1982DA8DF4EC36A /* Components */,
+				5505600C152BD6A4D41FA0D6 /* Screens */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		A5AD268F0001F76C2DF1E7EC = {
+			isa = PBXGroup;
+			children = (
+				7A03C83897FA2EF60348F36F /* SoluPos */,
+				9210097B2263000170B1F3C3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B5944111069805A2EF726C27 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				3CB32A37BFA5BF6A507D6D28 /* Store.swift */,
+				06984580B5B26381BBB171F7 /* StoreRepository.swift */,
+				F4A749EB0ED10E8B3A78F3CF /* UserPreferences.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		FDE127B87F2AB0BD268A6A03 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				24FC6FA26A014BF09C6DD07A /* BarcodeInjector.swift */,
+				3E25E14E497EC18AADB4EB89 /* POSWebView.swift */,
+				E4751514B333373A06054067 /* PrintMessageHandler.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E7B733E713929303C4FFFEB9 /* SoluPos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1781BB66DC3DC084B52BF97E /* Build configuration list for PBXNativeTarget "SoluPos" */;
+			buildPhases = (
+				8201EAEC52BCF6EC74E73BFC /* Sources */,
+				E0D30967520E0233371634FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SoluPos;
+			packageProductDependencies = (
+			);
+			productName = SoluPos;
+			productReference = 75D0BDF68538E80A5BB29985 /* SoluPos.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B1CA1D1A8877C034A5BA5F5F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					E7B733E713929303C4FFFEB9 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 81D76DC1C3087F8EE67513D0 /* Build configuration list for PBXProject "SoluPos" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A5AD268F0001F76C2DF1E7EC;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 9210097B2263000170B1F3C3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E7B733E713929303C4FFFEB9 /* SoluPos */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E0D30967520E0233371634FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3AF92BBEBB83A07675E59DDB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8201EAEC52BCF6EC74E73BFC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				03B411C3BF8C32A566FBAF86 /* BLEPrinterManager.swift in Sources */,
+				8A49C7689A71822252E96EB8 /* BarcodeInjector.swift in Sources */,
+				1CE5F6DFE3B454BD570EEB87 /* ContentView.swift in Sources */,
+				102B2E25CF7A0CC66F2E91C0 /* POSWebView.swift in Sources */,
+				920D2E679B27D4AC1D42D954 /* PrintMessageHandler.swift in Sources */,
+				7F9F3DBECF4FA20DABC5F669 /* PrinterConnectionState.swift in Sources */,
+				CB1EA9109CF9946E45BE4D3B /* PrinterSettingsView.swift in Sources */,
+				CED80279B5BB0A8EC872D408 /* ReceiptCapture.swift in Sources */,
+				8796BE3FC743E28BA87704DD /* ScannerView.swift in Sources */,
+				29D8215D21D6B11B88D09FCA /* SoluPosApp.swift in Sources */,
+				E0138767F0A087DE7FC92E07 /* Store.swift in Sources */,
+				FB70CFED8BAA559B393F71CA /* StoreFormView.swift in Sources */,
+				0949538E29477790A0820046 /* StoreListView.swift in Sources */,
+				9AC793EE8A78FAA00498B1AA /* StoreRepository.swift in Sources */,
+				A1E27E1D32DF7697BAEF5496 /* TutorialOverlay.swift in Sources */,
+				4D91D8A3273C7EDA9B136AD4 /* UserPreferences.swift in Sources */,
+				658EB789D9BE193C5EDB82A7 /* WebViewScreen.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		759BA6D33C7ED5A11372C759 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B111AA7B496EFA12A40A0E10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SoluPos/SoluPos.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = SoluPos/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.solupos.contenedor;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BEE9DE8D143A7CC8B9C8D477 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SoluPos/SoluPos.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = SoluPos/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.solupos.contenedor;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C16634120F70C5FA16047A34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1781BB66DC3DC084B52BF97E /* Build configuration list for PBXNativeTarget "SoluPos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B111AA7B496EFA12A40A0E10 /* Debug */,
+				BEE9DE8D143A7CC8B9C8D477 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		81D76DC1C3087F8EE67513D0 /* Build configuration list for PBXProject "SoluPos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C16634120F70C5FA16047A34 /* Debug */,
+				759BA6D33C7ED5A11372C759 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B1CA1D1A8877C034A5BA5F5F /* Project object */;
+}
