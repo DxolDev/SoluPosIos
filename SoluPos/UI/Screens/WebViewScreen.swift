@@ -14,6 +14,8 @@ struct WebViewScreen: View {
     @State private var keyboardHeight: CGFloat = 0
     @State private var printOutcome: PrintOutcome?
     @State private var previewImage: UIImage?
+    @State private var pendingBarcode: String?
+    @State private var scanDebug: String?
 
     private let printHandler = PrintMessageHandler()
     @EnvironmentObject private var printerManager: BLEPrinterManager
@@ -65,13 +67,26 @@ struct WebViewScreen: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: $showScanner) {
+        .fullScreenCover(isPresented: $showScanner, onDismiss: {
+            // Inyectar SOLO cuando el cover ya cerró y el webView volvió a estar
+            // activo/first responder — si se inyecta durante el cierre, el
+            // focus() y los eventos no afectan el input real.
+            guard let code = pendingBarcode else { return }
+            pendingBarcode = nil
+            webView?.becomeFirstResponder()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                injectBarcode(code)
+            }
+        }) {
             ScannerView(
                 onResult: { barcode in
+                    pendingBarcode = barcode
                     showScanner = false
-                    injectBarcode(barcode)
                 },
-                onCancel: { showScanner = false }
+                onCancel: {
+                    pendingBarcode = nil
+                    showScanner = false
+                }
             )
             .ignoresSafeArea()
         }
@@ -89,6 +104,7 @@ struct WebViewScreen: View {
             )
         }
         .overlay(printOutcomeOverlay)
+        .overlay(scanDebugOverlay)
         .onAppear {
             prefs.lastStoreId = store.id
             printHandler.onPrint = { [self] in
@@ -161,7 +177,62 @@ struct WebViewScreen: View {
     // MARK: - Scanner injection
 
     private func injectBarcode(_ barcode: String) {
-        webView?.evaluateJavaScript(BarcodeInjector.buildScript(barcode: barcode), completionHandler: nil)
+        webView?.evaluateJavaScript(BarcodeInjector.buildScript(barcode: barcode)) { result, error in
+            let message: String
+            if let error = error {
+                message = "JS error: \(error.localizedDescription)"
+            } else if let json = result as? String {
+                message = Self.describeScanResult(json)
+            } else {
+                message = "Sin respuesta del inyector"
+            }
+            DispatchQueue.main.async {
+                scanDebug = message
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                    if scanDebug == message { scanDebug = nil }
+                }
+            }
+        }
+    }
+
+    // Convierte el JSON de diagnóstico del injector en un texto legible.
+    private static func describeScanResult(_ json: String) -> String {
+        guard let data = json.data(using: .utf8),
+              let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return "Resultado no parseable"
+        }
+        let found = obj["found"] as? Bool ?? false
+        let inputs = obj["inputCount"] as? Int ?? -1
+        let iframes = obj["iframes"] as? Int ?? -1
+        if !found {
+            return "⚠️ No se encontró campo (inputs: \(inputs), iframes: \(iframes))"
+        }
+        let tag = obj["tag"] as? String ?? "?"
+        let id = obj["id"] as? String ?? ""
+        let source = obj["source"] as? String ?? "?"
+        let value = obj["valueAfter"] as? String ?? ""
+        let idPart = id.isEmpty ? "" : "#\(id)"
+        return "✅ \(tag)\(idPart) (\(source)) = \"\(value)\""
+    }
+
+    // MARK: - Overlay de diagnóstico del escaneo (temporal)
+
+    @ViewBuilder
+    private var scanDebugOverlay: some View {
+        if let msg = scanDebug {
+            VStack {
+                Text(msg)
+                    .font(.system(size: 13, weight: .medium, design: .monospaced))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(.black.opacity(0.85))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.top, 8)
+                    .padding(.horizontal, 12)
+                Spacer()
+            }
+        }
     }
 
     // El botón se posiciona respecto al safe area (que ya excluye el home
