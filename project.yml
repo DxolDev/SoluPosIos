@@ -50,8 +50,3 @@ targets:
         DEVELOPMENT_TEAM: ""
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-    entitlements:
-      path: SoluPos/SoluPos.entitlements
-      properties:
-        com.apple.developer.bluetooth-peripheral-manager-background-modes:
-          - central

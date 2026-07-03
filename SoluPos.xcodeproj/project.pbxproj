@@ -33,7 +33,6 @@
 		23E6EA49F452A2851950508B /* ReceiptCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCapture.swift; sourceTree = "<group>"; };
 		24FC6FA26A014BF09C6DD07A /* BarcodeInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeInjector.swift; sourceTree = "<group>"; };
 		30B3FAC27F21D5B4D512B05D /* BLEPrinterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPrinterManager.swift; sourceTree = "<group>"; };
-		371EED4366BDEC4BB99B964F /* SoluPos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SoluPos.entitlements; sourceTree = "<group>"; };
 		3CB32A37BFA5BF6A507D6D28 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		3E25E14E497EC18AADB4EB89 /* POSWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POSWebView.swift; sourceTree = "<group>"; };
 		4FF921CC1822CD43DBE8E159 /* TutorialOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialOverlay.swift; sourceTree = "<group>"; };
@@ -86,7 +85,6 @@
 			children = (
 				8920642AE6AFCD299EDE304F /* Assets.xcassets */,
 				EFD7C32A452772EAB07CB095 /* Info.plist */,
-				371EED4366BDEC4BB99B964F /* SoluPos.entitlements */,
 				EF2B768C5BD7A6132C4A01A4 /* SoluPosApp.swift */,
 				B5944111069805A2EF726C27 /* Data */,
 				322F39EB378B7E463E9EAF06 /* Printing */,
@@ -309,7 +307,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SoluPos/SoluPos.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
@@ -330,7 +327,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SoluPos/SoluPos.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
