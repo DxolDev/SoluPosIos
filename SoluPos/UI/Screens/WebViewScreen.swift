@@ -11,7 +11,7 @@ struct WebViewScreen: View {
     @State private var webView: WKWebView?
     @State private var showScanner = false
     @State private var showTutorial = false
-    @State private var keyboardVisible = false
+    @State private var keyboardHeight: CGFloat = 0
     @State private var printOutcome: PrintOutcome?
     @State private var previewImage: UIImage?
 
@@ -35,9 +35,10 @@ struct WebViewScreen: View {
                 )
             }
 
-            if !keyboardVisible {
-                floatingButtons
-            }
+            // El botón del escáner queda siempre visible (también con el teclado
+            // abierto), elevado por encima del teclado — así puedes escanear
+            // mientras buscas un producto en el POS.
+            floatingButtons
 
             if showTutorial {
                 WebViewTutorialOverlay(onDismiss: {
@@ -95,11 +96,14 @@ struct WebViewScreen: View {
             }
             if !prefs.webViewTutorialSeen { showTutorial = true }
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-            withAnimation(.easeInOut(duration: 0.2)) { keyboardVisible = true }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notif in
+            if let frame = notif.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                let overlap = max(0, frame.height - safeAreaBottomInset())
+                withAnimation(.easeInOut(duration: 0.25)) { keyboardHeight = overlap }
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-            withAnimation(.easeInOut(duration: 0.2)) { keyboardVisible = false }
+            withAnimation(.easeInOut(duration: 0.25)) { keyboardHeight = 0 }
         }
     }
 
@@ -125,7 +129,7 @@ struct WebViewScreen: View {
             }
         }
         .padding(.trailing, 16)
-        .padding(.bottom, 24)
+        .padding(.bottom, 24 + keyboardHeight)
     }
 
     // MARK: - Print flow
@@ -158,6 +162,15 @@ struct WebViewScreen: View {
 
     private func injectBarcode(_ barcode: String) {
         webView?.evaluateJavaScript(BarcodeInjector.buildScript(barcode: barcode), completionHandler: nil)
+    }
+
+    // El botón se posiciona respecto al safe area (que ya excluye el home
+    // indicator); la altura del teclado incluye ese inset, así que lo restamos
+    // para no elevar el botón de más.
+    private func safeAreaBottomInset() -> CGFloat {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first?.keyWindow?.safeAreaInsets.bottom ?? 0
     }
 
     // Cierra el teclado del WebView: quita el foco del input HTML (blur) y
