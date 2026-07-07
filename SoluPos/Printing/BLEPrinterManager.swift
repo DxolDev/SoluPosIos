@@ -3,15 +3,10 @@ import Foundation
 import UIKit
 import Combine
 
-// IMPORTANTE: Antes de usar, identificar los UUIDs reales del PT-210 con LightBlue.
-// Los UUIDs de abajo son los más comunes en impresoras térmicas BLE de 58mm.
-// Si no coinciden, la app los descubre automáticamente buscando la primera
-// característica con propiedad .write o .writeWithoutResponse.
-private let knownServiceUUIDs = [
-    CBUUID(string: "FF00"),
-    CBUUID(string: "49535343-FE7D-4AE5-8FA9-9FAFD205E455")
-]
-
+// La conexión es agnóstica de UUID: se escanean todos los dispositivos y se elige
+// la característica de escritura por su propiedad (.write, o .writeWithoutResponse
+// como fallback), no por un UUID fijo. Es lo más robusto para clones PT-210 cuyos
+// UUIDs varían entre unidades; no hace falta identificar/hardcodear UUIDs.
 final class BLEPrinterManager: NSObject, ObservableObject {
     @Published var connectionState: PrinterConnectionState = .idle
     @Published var discoveredDevices: [CBPeripheral] = []
