@@ -11,10 +11,8 @@ struct WebViewScreen: View {
     @State private var webView: WKWebView?
     @State private var showScanner = false
     @State private var showTutorial = false
-    @State private var keyboardHeight: CGFloat = 0
     @State private var printOutcome: PrintOutcome?
-    @State private var previewImage: UIImage?
-    @State private var pendingBarcode: String?
+    @State private var previewItem: PrintPreviewItem?
     @State private var scanDebug: String?
 
     private let printHandler = PrintMessageHandler()
@@ -48,6 +46,22 @@ struct WebViewScreen: View {
                     showTutorial = false
                 })
             }
+
+            // Escáner como overlay INLINE (port fiel del Android: un Box dentro del
+            // mismo contenedor, NO un modal). Al inyectar, el JS hace el.focus() y sube
+            // el teclado del WKWebView; con un .fullScreenCover eso ocurría durante la
+            // transición de descarte del modal y colgaba el main thread (watchdog →
+            // "se congela y se cierra"). Sin modal no hay transición con la que chocar.
+            if showScanner {
+                ScannerView(
+                    onResult: { barcode in
+                        injectBarcode(barcode)   // inyecta en el WebView vivo detrás
+                        showScanner = false      // quita el overlay al instante
+                    },
+                    onCancel: { showScanner = false }
+                )
+                .ignoresSafeArea()
+            }
         }
         .navigationTitle(store.name)
         .navigationBarTitleDisplayMode(.inline)
@@ -67,40 +81,22 @@ struct WebViewScreen: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: $showScanner, onDismiss: {
-            // Inyectar SOLO cuando el cover ya cerró y el webView volvió a estar
-            // activo/first responder — si se inyecta durante el cierre, el
-            // focus() y los eventos no afectan el input real.
-            guard let code = pendingBarcode else { return }
-            pendingBarcode = nil
-            webView?.becomeFirstResponder()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                injectBarcode(code)
-            }
-        }) {
-            ScannerView(
-                onResult: { barcode in
-                    pendingBarcode = barcode
-                    showScanner = false
-                },
-                onCancel: {
-                    pendingBarcode = nil
-                    showScanner = false
-                }
-            )
-            .ignoresSafeArea()
-        }
-        .sheet(item: Binding(
-            get: { previewImage.map { PrintPreviewItem(image: $0) } },
-            set: { if $0 == nil { previewImage = nil } }
-        )) { item in
+        // Ocultar la barra de navegación mientras se escanea: el escáner es un overlay
+        // inline a pantalla completa y el chevron atrás no debe quedar sobre la cámara.
+        .toolbar(showScanner ? .hidden : .visible, for: .navigationBar)
+        // El item se conserva en @State (identidad estable): antes se derivaba en el
+        // get de un Binding creando un PrintPreviewItem con UUID() nuevo en cada body
+        // eval, y .sheet(item:) lo leía como "item cambió" → descartaba y re-presentaba
+        // la hoja en bucle ("sube y baja"). Con el item estable se presenta una vez.
+        .sheet(item: $previewItem) { item in
             PrintPreviewSheet(
                 image: item.image,
                 onConfirm: {
-                    previewImage = nil
-                    Task { await sendToPrinter(item.image) }
+                    let img = item.image
+                    previewItem = nil
+                    Task { await sendToPrinter(img) }
                 },
-                onCancel: { previewImage = nil }
+                onCancel: { previewItem = nil }
             )
         }
         .overlay(printOutcomeOverlay)
@@ -112,15 +108,6 @@ struct WebViewScreen: View {
             }
             if !prefs.webViewTutorialSeen { showTutorial = true }
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notif in
-            if let frame = notif.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                let overlap = max(0, frame.height - safeAreaBottomInset())
-                withAnimation(.easeInOut(duration: 0.25)) { keyboardHeight = overlap }
-            }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-            withAnimation(.easeInOut(duration: 0.25)) { keyboardHeight = 0 }
-        }
     }
 
     // MARK: - Floating buttons
@@ -130,9 +117,9 @@ struct WebViewScreen: View {
             // El botón "volver a tiendas" del Android es innecesario en iOS:
             // el NavigationStack ya provee el botón atrás nativo (chevron).
             Button {
-                // Cerrar el teclado antes de abrir el escáner (si no tapa la
-                // cámara). El campo enfocado ya quedó guardado por el listener
-                // focusin, así que no perdemos el destino del escaneo.
+                // Igual que Android: antes de abrir el escáner ocultamos el teclado
+                // y desenfocamos. El destino del escaneo NO se recuerda — lo resuelve
+                // el JS del inyector (primer input del POS) al momento de inyectar.
                 closeKeyboard()
                 showScanner = true
             } label: {
@@ -146,7 +133,13 @@ struct WebViewScreen: View {
             }
         }
         .padding(.trailing, 16)
-        .padding(.bottom, 24 + keyboardHeight)
+        .padding(.bottom, 24)
+        // El botón sube SOLO con el keyboard-avoidance NATIVO de SwiftUI (equivalente al
+        // imePadding de Android): al aparecer el teclado, SwiftUI reduce el safe area
+        // inferior del ZStack y este botón —anclado abajo y que SÍ respeta el safe area—
+        // queda justo encima del teclado. El POSWebView no se mueve porque tiene
+        // .ignoresSafeArea(). (Antes había además un tracking MANUAL de keyboardHeight que
+        // se sumaba al nativo → doble desplazamiento → el botón terminaba arriba del todo.)
     }
 
     // MARK: - Print flow
@@ -166,7 +159,7 @@ struct WebViewScreen: View {
             printOutcome = .captureFailed
             return
         }
-        previewImage = image
+        previewItem = PrintPreviewItem(image: image)
     }
 
     private func sendToPrinter(_ image: UIImage) async {
@@ -178,7 +171,17 @@ struct WebViewScreen: View {
     // MARK: - Scanner injection
 
     private func injectBarcode(_ barcode: String) {
-        webView?.evaluateJavaScript(BarcodeInjector.buildScript(barcode: barcode)) { result, error in
+        print("[SCAN] injectBarcode(\"\(barcode)\") — webView disponible: \(webView != nil)")
+        guard let webView else {
+            // Nunca fallar en silencio: si no hay WebView, dejarlo en consola y en
+            // el overlay. (Antes el optional chaining se saltaba la inyección sin
+            // rastro alguno, que era justo el síntoma reportado.)
+            let msg = "⚠️ WebView no disponible al inyectar"
+            print("[SCAN] \(msg)")
+            scanDebug = msg
+            return
+        }
+        webView.evaluateJavaScript(BarcodeInjector.buildScript(barcode: barcode)) { result, error in
             let message: String
             if let error = error {
                 message = "JS error: \(error.localizedDescription)"
@@ -187,6 +190,7 @@ struct WebViewScreen: View {
             } else {
                 message = "Sin respuesta del inyector"
             }
+            print("[SCAN] resultado inyección: \(message)")
             DispatchQueue.main.async {
                 scanDebug = message
                 DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
@@ -236,18 +240,9 @@ struct WebViewScreen: View {
         }
     }
 
-    // El botón se posiciona respecto al safe area (que ya excluye el home
-    // indicator); la altura del teclado incluye ese inset, así que lo restamos
-    // para no elevar el botón de más.
-    private func safeAreaBottomInset() -> CGFloat {
-        UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first?.keyWindow?.safeAreaInsets.bottom ?? 0
-    }
-
-    // Cierra el teclado nativo (para que no tape la cámara). No hace blur del
-    // input por JS: el listener focusin ya guardó el campo destino, y evitar el
-    // blur JS deja el foco lógico más estable al volver.
+    // Cierra el teclado nativo (para que no tape la cámara), equivalente al
+    // hideSoftInputFromWindow + clearFocus de Android. El blur del input lo hace
+    // el propio JS del inyector al escanear (document.activeElement.blur()).
     private func closeKeyboard() {
         UIApplication.shared.sendAction(
             #selector(UIResponder.resignFirstResponder),

@@ -233,8 +233,9 @@ private struct StoreCard: View {
                 Divider()
                 Button("Eliminar", systemImage: "trash", role: .destructive, action: onDelete)
             } label: {
-                Image(systemName: "ellipsis.vertical")
+                Image(systemName: "ellipsis")
                     .font(.system(size: 16))
+                    .rotationEffect(.degrees(90)) // tres puntos verticales, como el MoreVert de Android
                     .foregroundStyle(.secondary)
                     .frame(width: 36, height: 36)
             }

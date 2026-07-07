@@ -249,7 +249,7 @@ private struct CameraPreviewLayer: UIViewRepresentable {
     }
 
     static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
-        coordinator.session.stopRunning()
+        coordinator.stopSession()
     }
 
     final class Coordinator: NSObject, AVCaptureMetadataOutputObjectsDelegate {
@@ -257,8 +257,20 @@ private struct CameraPreviewLayer: UIViewRepresentable {
         var previewLayer: AVCaptureVideoPreviewLayer?
         private let onResult: (String) -> Void
         private var didScan = false
+        private var didStop = false
 
         init(onResult: @escaping (String) -> Void) { self.onResult = onResult }
+
+        // Detiene la sesión SIEMPRE fuera del main thread: stopRunning() es bloqueante y
+        // llamarlo en main (como hacían metadataOutput y dismantleUIView) cuelga la UI y
+        // dispara el watchdog ("se congela y se cierra"). El guard evita el doble stop
+        // (uno al escanear, otro en el teardown de la vista).
+        func stopSession() {
+            guard !didStop else { return }
+            didStop = true
+            let session = self.session
+            DispatchQueue.global(qos: .userInitiated).async { session.stopRunning() }
+        }
 
         func setup(session: AVCaptureSession) {
             guard let device = AVCaptureDevice.default(for: .video),
@@ -279,7 +291,7 @@ private struct CameraPreviewLayer: UIViewRepresentable {
                   let obj = objects.first as? AVMetadataMachineReadableCodeObject,
                   let str = obj.stringValue else { return }
             didScan = true
-            session.stopRunning()
+            stopSession()
             onResult(str)
         }
     }

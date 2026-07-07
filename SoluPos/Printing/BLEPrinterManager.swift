@@ -1,5 +1,5 @@
 import Foundation
-import CoreBluetooth
+@preconcurrency import CoreBluetooth
 import UIKit
 import Combine
 
@@ -23,13 +23,33 @@ final class BLEPrinterManager: NSObject, ObservableObject {
     private var pendingData: Data?
     private var sendCompletion: ((Result<Void, Error>) -> Void)?
     private var dataOffset = 0
+    // Modo de escritura elegido al descubrir la característica: .withResponse (con ACK,
+    // control de flujo real) si la característica lo soporta; .withoutResponse (pacing
+    // manual) como fallback.
+    private var writeType: CBCharacteristicWriteType = .withoutResponse
+    // Watchdog por franja: falla el envío si nunca llega la confirmación esperada,
+    // para no colgar la impresión indefinidamente.
+    private var sendWatchdog: DispatchWorkItem?
 
     // Tamaño de tira para evitar que el PT-210 encoja imágenes altas (puerto de Android)
     static let stripHeightPx = 128
 
+    // Pausa entre franjas para no desbordar el buffer de la PT-210: BLE .withoutResponse
+    // no tiene ACK del periférico, así que hay que darle tiempo real de impresión
+    // (mecánico) antes de mandar la siguiente franja. Valor de partida empírico — si el
+    // papel sigue saliendo con texto corrupto, subir este valor (o bajar stripHeightPx).
+    static let interStripDelayNs: UInt64 = 120_000_000 // 120ms
+
+    // Cola serial dedicada para el delegate del CBCentralManager y los re-disparos
+    // recursivos de sendNextChunk: DispatchQueue.global(qos:) es concurrente, así que
+    // peripheralIsReady(toSendWriteWithoutResponse:) y la recursión de sendNextChunk
+    // podían correr al mismo tiempo en hilos distintos y competir por dataOffset/
+    // pendingData sin sincronización, corrompiendo los bytes enviados a la impresora.
+    private let bleQueue = DispatchQueue(label: "com.solupos.contenedor.ble-printer")
+
     override init() {
         super.init()
-        central = CBCentralManager(delegate: self, queue: DispatchQueue.global(qos: .userInitiated))
+        central = CBCentralManager(delegate: self, queue: bleQueue)
     }
 
     // MARK: - Scan
@@ -61,11 +81,18 @@ final class BLEPrinterManager: NSObject, ObservableObject {
     }
 
     func printBitmap(_ image: UIImage, config: UserPreferences.PrinterConfig) async -> PrintOutcome {
-        guard let data = ReceiptCapture.toEscPosRaster(image: image) else {
+        // Enviar en tiras de 128px (mismo workaround que Android: el PT-210 encoge imágenes altas)
+        guard let strips = ReceiptCapture.toEscPosRasterStrips(image: image, stripHeightPx: Self.stripHeightPx) else {
             return .captureFailed
         }
-        // Enviar en tiras de 128px (mismo workaround que Android: el PT-210 encoge imágenes altas)
-        return await sendData(data, config: config)
+        // Cada tira se envía y se espera por separado (con pausa) para no desbordar el
+        // buffer de la impresora: BLE .withoutResponse no tiene ACK del periférico.
+        for strip in strips {
+            let outcome = await sendData(strip, config: config)
+            if case .success = outcome {} else { return outcome }
+            try? await Task.sleep(nanoseconds: Self.interStripDelayNs)
+        }
+        return .success
     }
 
     // MARK: - Private Send
@@ -76,40 +103,84 @@ final class BLEPrinterManager: NSObject, ObservableObject {
             return .error(message: "No hay conexión con la impresora. Conecta primero.")
         }
         return await withCheckedContinuation { continuation in
-            self.pendingData = data
-            self.dataOffset = 0
-            self.sendCompletion = { result in
-                switch result {
-                case .success: continuation.resume(returning: .success)
-                case .failure(let e): continuation.resume(returning: .error(message: e.localizedDescription))
+            // Todo el envío arranca y corre dentro de bleQueue (cola serial) para
+            // serializar con los callbacks del delegate y garantizar visibilidad de
+            // memoria de pendingData/dataOffset.
+            bleQueue.async { [weak self] in
+                guard let self = self else {
+                    continuation.resume(returning: .error(message: "Impresora no disponible"))
+                    return
                 }
+                self.pendingData = data
+                self.dataOffset = 0
+                self.sendCompletion = { result in
+                    switch result {
+                    case .success: continuation.resume(returning: .success)
+                    case .failure(let e): continuation.resume(returning: .error(message: e.localizedDescription))
+                    }
+                }
+                // Watchdog: si el envío de esta franja no termina en 15s (p.ej. el
+                // periférico nunca manda el ACK esperado), falla en vez de colgar.
+                let watchdog = DispatchWorkItem { [weak self] in
+                    self?.finishSend(.failure(NSError(domain: "BLEPrinter", code: -1,
+                        userInfo: [NSLocalizedDescriptionKey: "Tiempo de espera agotado enviando a la impresora"])))
+                }
+                self.sendWatchdog = watchdog
+                self.bleQueue.asyncAfter(deadline: .now() + 15, execute: watchdog)
+                self.sendNextChunk(peripheral: peripheral, characteristic: characteristic)
             }
-            sendNextChunk(peripheral: peripheral, characteristic: characteristic)
         }
     }
 
     private func sendNextChunk(peripheral: CBPeripheral, characteristic: CBCharacteristic) {
-        guard var data = pendingData else { return }
+        // Siempre en bleQueue: nunca corre concurrentemente consigo mismo.
+        guard let data = pendingData else { return }
         guard dataOffset < data.count else {
-            sendCompletion?(.success(()))
-            pendingData = nil
-            sendCompletion = nil
+            finishSend(.success(()))
             return
         }
 
-        let mtu = peripheral.maximumWriteValueLength(for: .withoutResponse)
+        let mtu = peripheral.maximumWriteValueLength(for: writeType)
         let chunkSize = min(mtu, data.count - dataOffset)
         let chunk = data.subdata(in: dataOffset..<(dataOffset + chunkSize))
 
-        if peripheral.canSendWriteWithoutResponse {
+        switch writeType {
+        case .withResponse:
+            // Control de flujo real: se escribe un paquete y el ACK del periférico
+            // (didWriteValueFor) dispara el siguiente. Un envío en vuelo a la vez.
+            peripheral.writeValue(chunk, for: characteristic, type: .withResponse)
+            dataOffset += chunkSize
+        case .withoutResponse:
+            // Sin ACK: pacing manual. Se respeta la cola local (canSend) y se espacian
+            // los paquetes en proporción a su tamaño (~12 bytes/ms, por debajo de lo que
+            // imprime la PT-210) para que su buffer se vacíe y no se desborde.
+            guard peripheral.canSendWriteWithoutResponse else {
+                scheduleNextChunk(afterMs: 8, peripheral, characteristic)
+                return
+            }
             peripheral.writeValue(chunk, for: characteristic, type: .withoutResponse)
             dataOffset += chunkSize
-            // Recursión para el siguiente chunk sin bloquear el thread
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.sendNextChunk(peripheral: peripheral, characteristic: characteristic)
-            }
+            scheduleNextChunk(afterMs: max(4, chunkSize / 12), peripheral, characteristic)
+        @unknown default:
+            finishSend(.failure(NSError(domain: "BLEPrinter", code: -2,
+                userInfo: [NSLocalizedDescriptionKey: "Tipo de escritura no soportado"])))
         }
-        // Si no puede enviar, peripheralIsReady(toSendWriteWithoutResponse:) disparará el siguiente chunk
+    }
+
+    private func scheduleNextChunk(afterMs ms: Int, _ peripheral: CBPeripheral, _ characteristic: CBCharacteristic) {
+        bleQueue.asyncAfter(deadline: .now() + .milliseconds(ms)) { [weak self] in
+            self?.sendNextChunk(peripheral: peripheral, characteristic: characteristic)
+        }
+    }
+
+    private func finishSend(_ result: Result<Void, Error>) {
+        // Siempre en bleQueue. Resume la continuación exactamente una vez.
+        sendWatchdog?.cancel()
+        sendWatchdog = nil
+        guard let completion = sendCompletion else { return }
+        sendCompletion = nil
+        pendingData = nil
+        completion(result)
     }
 
     // MARK: - Disconnect
@@ -184,19 +255,48 @@ extension BLEPrinterManager: CBPeripheralDelegate {
                     didDiscoverCharacteristicsFor service: CBService,
                     error: Error?) {
         guard error == nil, let characteristics = service.characteristics else { return }
-        for char in characteristics {
-            if char.properties.contains(.write) || char.properties.contains(.writeWithoutResponse) {
-                writeCharacteristic = char
-                DispatchQueue.main.async {
-                    self.connectionState = .connected(deviceName: peripheral.name ?? peripheral.identifier.uuidString)
-                }
-                return
-            }
+        // Preferir una característica con .write (escritura con respuesta/ACK → control
+        // de flujo real, evita desbordar el buffer de la impresora). Sólo si no hay
+        // ninguna, caer en .writeWithoutResponse (con pacing manual). didDiscover... se
+        // llama una vez por servicio: la rama .write siempre "sube de categoría", y la
+        // de fallback sólo actúa si aún no se eligió nada.
+        if let writable = characteristics.first(where: { $0.properties.contains(.write) }) {
+            writeCharacteristic = writable
+            writeType = .withResponse
+            print("[PRINT] Característica de escritura: \(writable.uuid) modo=withResponse")
+            setConnected(peripheral)
+            return
+        }
+        if writeCharacteristic == nil,
+           let woResp = characteristics.first(where: { $0.properties.contains(.writeWithoutResponse) }) {
+            writeCharacteristic = woResp
+            writeType = .withoutResponse
+            print("[PRINT] Característica de escritura: \(woResp.uuid) modo=withoutResponse (sin ACK, pacing manual)")
+            setConnected(peripheral)
         }
     }
 
-    func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
-        guard let char = writeCharacteristic else { return }
-        sendNextChunk(peripheral: peripheral, characteristic: char)
+    private func setConnected(_ peripheral: CBPeripheral) {
+        DispatchQueue.main.async {
+            self.connectionState = .connected(deviceName: peripheral.name ?? peripheral.identifier.uuidString)
+        }
     }
+
+    func peripheral(_ peripheral: CBPeripheral,
+                    didWriteValueFor characteristic: CBCharacteristic,
+                    error: Error?) {
+        // Sólo se usa en modo .withResponse: el ACK de cada escritura dispara el
+        // siguiente chunk (control de flujo). Corre en bleQueue.
+        if let error = error {
+            print("[PRINT] Error escribiendo chunk: \(error.localizedDescription)")
+            finishSend(.failure(error))
+            return
+        }
+        sendNextChunk(peripheral: peripheral, characteristic: characteristic)
+    }
+
+    // Nota: no implementamos peripheralIsReady(toSendWriteWithoutResponse:) para avanzar
+    // el envío. El modo .withoutResponse se auto-agenda con pacing en sendNextChunk y el
+    // modo .withResponse lo hace didWriteValueFor; tener un segundo "driver" duplicaría
+    // envíos y reintroduciría la corrupción.
 }

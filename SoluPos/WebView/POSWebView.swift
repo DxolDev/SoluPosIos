@@ -23,15 +23,6 @@ struct POSWebView: UIViewRepresentable {
         )
         config.userContentController.addUserScript(printScript)
 
-        // Instalar el listener que recuerda el último input enfocado, para que
-        // el escáner sepa a qué campo devolver el código aunque el foco se pierda.
-        let focusScript = WKUserScript(
-            source: BarcodeInjector.focusTrackingScript,
-            injectionTime: .atDocumentEnd,
-            forMainFrameOnly: false
-        )
-        config.userContentController.addUserScript(focusScript)
-
         // Permitir media inline y JavaScript
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = []
@@ -44,7 +35,12 @@ struct POSWebView: UIViewRepresentable {
         let ua = WKWebView().value(forKey: "userAgent") as? String ?? ""
         webView.customUserAgent = ua.replacingOccurrences(of: "; wv)", with: ")")
 
-        webViewRef?(webView)
+        // Publicar la referencia fuera del ciclo de update de SwiftUI: asignar el
+        // @State webView de WebViewScreen aquí, síncrono dentro de makeUIView,
+        // dispara "Modifying state during view update".
+        DispatchQueue.main.async { [webViewRef] in
+            webViewRef?(webView)
+        }
 
         let request = URLRequest(url: url)
         webView.load(request)
