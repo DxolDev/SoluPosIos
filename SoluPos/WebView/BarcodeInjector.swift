@@ -11,9 +11,6 @@ enum BarcodeInjector {
     // del documento. Android desenfoca el WebView (clearFocus) antes de escanear, así
     // que activeElement queda en body y siempre cae al primer input. En iOS logramos
     // el mismo efecto con un blur() al inicio, para que el destino sea determinista.
-    //
-    // Retorna un JSON de diagnóstico (solo iOS) para ver en pantalla qué campo
-    // recibió el código; no altera el destino.
     static func buildScript(barcode: String) -> String {
         let safe = barcode
             .replacingOccurrences(of: "\\", with: "\\\\")
@@ -31,19 +28,11 @@ enum BarcodeInjector {
                 'input[type="search"]:not([disabled]):not([readonly]),' +
                 'input:not([type]):not([disabled]):not([readonly])';
 
-            // Solo diagnóstico (no participa en la selección): inputs e iframes.
-            var inputCount = document.querySelectorAll(selector).length;
-            var iframeCount = document.querySelectorAll('iframe').length;
-
-            var source = 'active';
             var el = document.activeElement;
             if (!el || (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA')) {
                 el = document.querySelector(selector);
-                source = 'query';
             }
-            if (!el) {
-                return JSON.stringify({ found: false, inputCount: inputCount, iframes: iframeCount });
-            }
+            if (!el) { return; }
             el.focus();
 
             var nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
@@ -79,18 +68,6 @@ enum BarcodeInjector {
             if (window.$ || window.jQuery) {
                 (window.$ || window.jQuery)(el).trigger('change').trigger('input');
             }
-
-            return JSON.stringify({
-                found: true,
-                source: source,
-                tag: el.tagName,
-                id: el.id || '',
-                name: el.name || '',
-                type: el.type || '',
-                valueAfter: el.value,
-                inputCount: inputCount,
-                iframes: iframeCount
-            });
         })('\(safe)');
         """
     }

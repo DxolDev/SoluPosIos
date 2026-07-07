@@ -13,7 +13,6 @@ struct WebViewScreen: View {
     @State private var showTutorial = false
     @State private var printOutcome: PrintOutcome?
     @State private var previewItem: PrintPreviewItem?
-    @State private var scanDebug: String?
 
     private let printHandler = PrintMessageHandler()
     @EnvironmentObject private var printerManager: BLEPrinterManager
@@ -100,7 +99,6 @@ struct WebViewScreen: View {
             )
         }
         .overlay(printOutcomeOverlay)
-        .overlay(scanDebugOverlay)
         .onAppear {
             prefs.lastStoreId = store.id
             printHandler.onPrint = { [self] in
@@ -171,73 +169,10 @@ struct WebViewScreen: View {
     // MARK: - Scanner injection
 
     private func injectBarcode(_ barcode: String) {
-        print("[SCAN] injectBarcode(\"\(barcode)\") — webView disponible: \(webView != nil)")
-        guard let webView else {
-            // Nunca fallar en silencio: si no hay WebView, dejarlo en consola y en
-            // el overlay. (Antes el optional chaining se saltaba la inyección sin
-            // rastro alguno, que era justo el síntoma reportado.)
-            let msg = "⚠️ WebView no disponible al inyectar"
-            print("[SCAN] \(msg)")
-            scanDebug = msg
-            return
-        }
-        webView.evaluateJavaScript(BarcodeInjector.buildScript(barcode: barcode)) { result, error in
-            let message: String
-            if let error = error {
-                message = "JS error: \(error.localizedDescription)"
-            } else if let json = result as? String {
-                message = Self.describeScanResult(json)
-            } else {
-                message = "Sin respuesta del inyector"
-            }
-            print("[SCAN] resultado inyección: \(message)")
-            DispatchQueue.main.async {
-                scanDebug = message
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                    if scanDebug == message { scanDebug = nil }
-                }
-            }
-        }
-    }
-
-    // Convierte el JSON de diagnóstico del injector en un texto legible.
-    private static func describeScanResult(_ json: String) -> String {
-        guard let data = json.data(using: .utf8),
-              let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            return "Resultado no parseable"
-        }
-        let found = obj["found"] as? Bool ?? false
-        let inputs = obj["inputCount"] as? Int ?? -1
-        let iframes = obj["iframes"] as? Int ?? -1
-        if !found {
-            return "⚠️ No se encontró campo (inputs: \(inputs), iframes: \(iframes))"
-        }
-        let tag = obj["tag"] as? String ?? "?"
-        let id = obj["id"] as? String ?? ""
-        let source = obj["source"] as? String ?? "?"
-        let value = obj["valueAfter"] as? String ?? ""
-        let idPart = id.isEmpty ? "" : "#\(id)"
-        return "✅ \(tag)\(idPart) (\(source)) = \"\(value)\""
-    }
-
-    // MARK: - Overlay de diagnóstico del escaneo (temporal)
-
-    @ViewBuilder
-    private var scanDebugOverlay: some View {
-        if let msg = scanDebug {
-            VStack {
-                Text(msg)
-                    .font(.system(size: 13, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
-                    .background(.black.opacity(0.85))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding(.top, 8)
-                    .padding(.horizontal, 12)
-                Spacer()
-            }
-        }
+        // Guard explícito (no optional chaining) para no saltar la inyección en
+        // silencio si el WebView aún no existe.
+        guard let webView else { return }
+        webView.evaluateJavaScript(BarcodeInjector.buildScript(barcode: barcode), completionHandler: nil)
     }
 
     // Cierra el teclado nativo (para que no tape la cámara), equivalente al

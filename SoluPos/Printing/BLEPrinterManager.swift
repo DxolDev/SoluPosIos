@@ -263,7 +263,6 @@ extension BLEPrinterManager: CBPeripheralDelegate {
         if let writable = characteristics.first(where: { $0.properties.contains(.write) }) {
             writeCharacteristic = writable
             writeType = .withResponse
-            print("[PRINT] Característica de escritura: \(writable.uuid) modo=withResponse")
             setConnected(peripheral)
             return
         }
@@ -271,7 +270,6 @@ extension BLEPrinterManager: CBPeripheralDelegate {
            let woResp = characteristics.first(where: { $0.properties.contains(.writeWithoutResponse) }) {
             writeCharacteristic = woResp
             writeType = .withoutResponse
-            print("[PRINT] Característica de escritura: \(woResp.uuid) modo=withoutResponse (sin ACK, pacing manual)")
             setConnected(peripheral)
         }
     }
@@ -288,7 +286,6 @@ extension BLEPrinterManager: CBPeripheralDelegate {
         // Sólo se usa en modo .withResponse: el ACK de cada escritura dispara el
         // siguiente chunk (control de flujo). Corre en bleQueue.
         if let error = error {
-            print("[PRINT] Error escribiendo chunk: \(error.localizedDescription)")
             finishSend(.failure(error))
             return
         }
