@@ -7,7 +7,11 @@ import Combine
 // la característica de escritura por su propiedad (.write, o .writeWithoutResponse
 // como fallback), no por un UUID fijo. Es lo más robusto para clones PT-210 cuyos
 // UUIDs varían entre unidades; no hace falta identificar/hardcodear UUIDs.
-final class BLEPrinterManager: NSObject, ObservableObject {
+// @unchecked Sendable: la seguridad de hilos se garantiza manualmente — todo el
+// estado BLE (peripheral, writeCharacteristic, pendingData, dataOffset, etc.) se
+// accede solo dentro de `bleQueue` (cola serial), y los @Published se publican en
+// main. Necesario para capturar `self` en los closures @Sendable de bleQueue.async.
+final class BLEPrinterManager: NSObject, ObservableObject, @unchecked Sendable {
     @Published var connectionState: PrinterConnectionState = .idle
     @Published var discoveredDevices: [CBPeripheral] = []
 
