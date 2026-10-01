@@ -12,6 +12,7 @@
 		102B2E25CF7A0CC66F2E91C0 /* POSWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E25E14E497EC18AADB4EB89 /* POSWebView.swift */; };
 		1CE5F6DFE3B454BD570EEB87 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09F8B7F5AA62CA4B5D26E74 /* ContentView.swift */; };
 		29D8215D21D6B11B88D09FCA /* SoluPosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2B768C5BD7A6132C4A01A4 /* SoluPosApp.swift */; };
+		391BCC517C84EB8D30884610 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7A296D06B014E6AD5373449D /* PrivacyInfo.xcprivacy */; };
 		3AF92BBEBB83A07675E59DDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8920642AE6AFCD299EDE304F /* Assets.xcassets */; };
 		4D91D8A3273C7EDA9B136AD4 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A749EB0ED10E8B3A78F3CF /* UserPreferences.swift */; };
 		658EB789D9BE193C5EDB82A7 /* WebViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB7AB988FD29B912E972E2 /* WebViewScreen.swift */; };
@@ -38,7 +39,8 @@
 		4FF921CC1822CD43DBE8E159 /* TutorialOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialOverlay.swift; sourceTree = "<group>"; };
 		5E7FEC69F925C066FA44709B /* StoreFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreFormView.swift; sourceTree = "<group>"; };
 		5E890746997A4B56180FF75F /* StoreListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListView.swift; sourceTree = "<group>"; };
-		75D0BDF68538E80A5BB29985 /* SoluPos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoluPos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75D0BDF68538E80A5BB29985 /* SoluPos.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SoluPos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A296D06B014E6AD5373449D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8920642AE6AFCD299EDE304F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C79164B81287288B05DBB97 /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
 		A09F8B7F5AA62CA4B5D26E74 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 			children = (
 				8920642AE6AFCD299EDE304F /* Assets.xcassets */,
 				EFD7C32A452772EAB07CB095 /* Info.plist */,
+				7A296D06B014E6AD5373449D /* PrivacyInfo.xcprivacy */,
 				EF2B768C5BD7A6132C4A01A4 /* SoluPosApp.swift */,
 				B5944111069805A2EF726C27 /* Data */,
 				322F39EB378B7E463E9EAF06 /* Printing */,
@@ -180,6 +183,7 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					E7B733E713929303C4FFFEB9 = {
+						DevelopmentTeam = SW4UL7W5X4;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -209,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AF92BBEBB83A07675E59DDB /* Assets.xcassets in Resources */,
+				391BCC517C84EB8D30884610 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,7 +313,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = LDB55TCA53;
+				DEVELOPMENT_TEAM = SW4UL7W5X4;
 				INFOPLIST_FILE = SoluPos/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -328,7 +333,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = LDB55TCA53;
+				DEVELOPMENT_TEAM = SW4UL7W5X4;
 				INFOPLIST_FILE = SoluPos/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
