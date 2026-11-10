@@ -10,6 +10,9 @@ final class UserPreferences: ObservableObject {
         static let printerConfig = "printerConfig"
         static let tutorialSeen = "tutorialSeen"
         static let webViewTutorialSeen = "webViewTutorialSeen"
+        // Avisos del consultador de precios: se muestran una vez, también a quien ya vio el tutorial original.
+        static let priceTipListSeen = "has_seen_price_tip_list"
+        static let priceTipPosSeen = "has_seen_price_tip_pos"
     }
 
     struct PrinterConfig: Codable {
@@ -52,10 +55,20 @@ final class UserPreferences: ObservableObject {
         didSet { defaults.set(webViewTutorialSeen, forKey: Keys.webViewTutorialSeen) }
     }
 
+    @Published var priceTipListSeen: Bool {
+        didSet { defaults.set(priceTipListSeen, forKey: Keys.priceTipListSeen) }
+    }
+
+    @Published var priceTipPosSeen: Bool {
+        didSet { defaults.set(priceTipPosSeen, forKey: Keys.priceTipPosSeen) }
+    }
+
     private init() {
         lastStoreId = defaults.string(forKey: Keys.lastStoreId)
         tutorialSeen = defaults.bool(forKey: Keys.tutorialSeen)
         webViewTutorialSeen = defaults.bool(forKey: Keys.webViewTutorialSeen)
+        priceTipListSeen = defaults.bool(forKey: Keys.priceTipListSeen)
+        priceTipPosSeen = defaults.bool(forKey: Keys.priceTipPosSeen)
 
         if let data = defaults.data(forKey: Keys.printerConfig),
            let config = try? JSONDecoder().decode(PrinterConfig.self, from: data) {
@@ -72,6 +85,8 @@ final class UserPreferences: ObservableObject {
     func resetTutorials() {
         tutorialSeen = false
         webViewTutorialSeen = false
+        priceTipListSeen = false
+        priceTipPosSeen = false
     }
 
     static func printableDots(paperWidthMm: Int) -> Int {

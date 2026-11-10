@@ -10,41 +10,88 @@
 		03B411C3BF8C32A566FBAF86 /* BLEPrinterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B3FAC27F21D5B4D512B05D /* BLEPrinterManager.swift */; };
 		0949538E29477790A0820046 /* StoreListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E890746997A4B56180FF75F /* StoreListView.swift */; };
 		102B2E25CF7A0CC66F2E91C0 /* POSWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E25E14E497EC18AADB4EB89 /* POSWebView.swift */; };
+		1071A83CE54E2514F4400EE7 /* ScanAndFormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C632B0D6809AA52F33085162 /* ScanAndFormatTests.swift */; };
+		12666DA8C43A261E903BB996 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FDD6683814F5A731D5512F /* Keychain.swift */; };
 		1CE5F6DFE3B454BD570EEB87 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09F8B7F5AA62CA4B5D26E74 /* ContentView.swift */; };
+		1DE6EA0BA709F7B79B17A9C4 /* PriceFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CB3672DF078522BCA35919 /* PriceFormat.swift */; };
 		29D8215D21D6B11B88D09FCA /* SoluPosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2B768C5BD7A6132C4A01A4 /* SoluPosApp.swift */; };
 		391BCC517C84EB8D30884610 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7A296D06B014E6AD5373449D /* PrivacyInfo.xcprivacy */; };
 		3AF92BBEBB83A07675E59DDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8920642AE6AFCD299EDE304F /* Assets.xcassets */; };
+		4015ABF0DC1E77B94097BE1C /* LookupResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC19D10F0A2B3A2D9D07E6D9 /* LookupResolver.swift */; };
 		4D91D8A3273C7EDA9B136AD4 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A749EB0ED10E8B3A78F3CF /* UserPreferences.swift */; };
+		581417D29EF82B0616BCBBB0 /* DemoPriceLookupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAA830CE156F9C6EB6BFECF /* DemoPriceLookupService.swift */; };
+		612B1FA02E53F89F9F609334 /* ContinuousScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39643E6670AE299F2AEBC1C2 /* ContinuousScanner.swift */; };
 		658EB789D9BE193C5EDB82A7 /* WebViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB7AB988FD29B912E972E2 /* WebViewScreen.swift */; };
+		6D6424533D040DBB5EFAD013 /* PriceResultSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B304A8C12DEF68E548588DC /* PriceResultSheet.swift */; };
+		6E1DE97A509BBFD28971A76F /* PriceLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1BD6C60047596E9BF11B73 /* PriceLogicTests.swift */; };
+		757943724E0996E0DFBC639B /* TokenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327EA63DBE7DD1A6E1675323 /* TokenStore.swift */; };
 		7F9F3DBECF4FA20DABC5F669 /* PrinterConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A35596A927EE88F0ADAA777 /* PrinterConnectionState.swift */; };
 		8796BE3FC743E28BA87704DD /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C79164B81287288B05DBB97 /* ScannerView.swift */; };
+		88678C082B3D00ABF650AC40 /* PriceCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48313B06E255D3B2C648A52 /* PriceCheckView.swift */; };
 		8A49C7689A71822252E96EB8 /* BarcodeInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FC6FA26A014BF09C6DD07A /* BarcodeInjector.swift */; };
+		8FF143B1F1BB4587F4C55D49 /* ScanStabilizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A98240EB379AFEF6BA33486 /* ScanStabilizer.swift */; };
+		91C25D854EFA9BCB94D6B604 /* CodeInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C00DE5065BC070D6A892FBE /* CodeInterpreterTests.swift */; };
 		920D2E679B27D4AC1D42D954 /* PrintMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4751514B333373A06054067 /* PrintMessageHandler.swift */; };
+		94763086C99A407DFCC261F2 /* Features.swift in Sources */ = {isa = PBXBuildFile; fileRef = C522A3A29DBD88649B40CF0B /* Features.swift */; };
 		9AC793EE8A78FAA00498B1AA /* StoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06984580B5B26381BBB171F7 /* StoreRepository.swift */; };
 		A1E27E1D32DF7697BAEF5496 /* TutorialOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF921CC1822CD43DBE8E159 /* TutorialOverlay.swift */; };
+		B4C77637B23B8E3D94AF79C2 /* CodeInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ACD7A85D5459C83C4498B7 /* CodeInterpreter.swift */; };
 		CB1EA9109CF9946E45BE4D3B /* PrinterSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DFBE52A3058AC7FBA3DF03 /* PrinterSettingsView.swift */; };
+		CB9A49A37137881EBB4C085D /* PinCryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE3627CA0ECD5D390D0A3D /* PinCryptoTests.swift */; };
+		CC040531B3DC0C2F91ED0032 /* PinCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1F27C0F7B190F655DBED8D /* PinCrypto.swift */; };
 		CED80279B5BB0A8EC872D408 /* ReceiptCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E6EA49F452A2851950508B /* ReceiptCapture.swift */; };
+		D94A633085B68B079CB59565 /* KioskPinStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A127A8AE3A9A40A16AEB6C /* KioskPinStore.swift */; };
+		DBF85560F11EB1DFF0C1F9E6 /* PriceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B299F0507F12C35328EF9DE6 /* PriceModels.swift */; };
 		E0138767F0A087DE7FC92E07 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB32A37BFA5BF6A507D6D28 /* Store.swift */; };
 		FB70CFED8BAA559B393F71CA /* StoreFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7FEC69F925C066FA44709B /* StoreFormView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		59EF5EECCE60F2A8487396A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B1CA1D1A8877C034A5BA5F5F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E7B733E713929303C4FFFEB9;
+			remoteInfo = SoluPos;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		04FDD6683814F5A731D5512F /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		06984580B5B26381BBB171F7 /* StoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRepository.swift; sourceTree = "<group>"; };
+		0B304A8C12DEF68E548588DC /* PriceResultSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceResultSheet.swift; sourceTree = "<group>"; };
 		1A35596A927EE88F0ADAA777 /* PrinterConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterConnectionState.swift; sourceTree = "<group>"; };
 		23E6EA49F452A2851950508B /* ReceiptCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCapture.swift; sourceTree = "<group>"; };
 		24FC6FA26A014BF09C6DD07A /* BarcodeInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeInjector.swift; sourceTree = "<group>"; };
+		27CB3672DF078522BCA35919 /* PriceFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormat.swift; sourceTree = "<group>"; };
 		30B3FAC27F21D5B4D512B05D /* BLEPrinterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPrinterManager.swift; sourceTree = "<group>"; };
+		327EA63DBE7DD1A6E1675323 /* TokenStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStore.swift; sourceTree = "<group>"; };
+		39643E6670AE299F2AEBC1C2 /* ContinuousScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuousScanner.swift; sourceTree = "<group>"; };
 		3CB32A37BFA5BF6A507D6D28 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		3E25E14E497EC18AADB4EB89 /* POSWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POSWebView.swift; sourceTree = "<group>"; };
 		4FF921CC1822CD43DBE8E159 /* TutorialOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialOverlay.swift; sourceTree = "<group>"; };
 		5E7FEC69F925C066FA44709B /* StoreFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreFormView.swift; sourceTree = "<group>"; };
 		5E890746997A4B56180FF75F /* StoreListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListView.swift; sourceTree = "<group>"; };
+		6A98240EB379AFEF6BA33486 /* ScanStabilizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanStabilizer.swift; sourceTree = "<group>"; };
+		6C00DE5065BC070D6A892FBE /* CodeInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInterpreterTests.swift; sourceTree = "<group>"; };
+		6C1BD6C60047596E9BF11B73 /* PriceLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceLogicTests.swift; sourceTree = "<group>"; };
 		75D0BDF68538E80A5BB29985 /* SoluPos.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SoluPos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A296D06B014E6AD5373449D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8920642AE6AFCD299EDE304F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8E1F27C0F7B190F655DBED8D /* PinCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinCrypto.swift; sourceTree = "<group>"; };
 		9C79164B81287288B05DBB97 /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
 		A09F8B7F5AA62CA4B5D26E74 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		ABAA830CE156F9C6EB6BFECF /* DemoPriceLookupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoPriceLookupService.swift; sourceTree = "<group>"; };
+		B299F0507F12C35328EF9DE6 /* PriceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceModels.swift; sourceTree = "<group>"; };
+		BC19D10F0A2B3A2D9D07E6D9 /* LookupResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookupResolver.swift; sourceTree = "<group>"; };
+		BDB31274F3320334AE73A33E /* SoluPosTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SoluPosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0DFBE52A3058AC7FBA3DF03 /* PrinterSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterSettingsView.swift; sourceTree = "<group>"; };
+		C522A3A29DBD88649B40CF0B /* Features.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features.swift; sourceTree = "<group>"; };
+		C632B0D6809AA52F33085162 /* ScanAndFormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanAndFormatTests.swift; sourceTree = "<group>"; };
+		CFCE3627CA0ECD5D390D0A3D /* PinCryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinCryptoTests.swift; sourceTree = "<group>"; };
+		D48313B06E255D3B2C648A52 /* PriceCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceCheckView.swift; sourceTree = "<group>"; };
+		D7ACD7A85D5459C83C4498B7 /* CodeInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInterpreter.swift; sourceTree = "<group>"; };
+		E0A127A8AE3A9A40A16AEB6C /* KioskPinStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KioskPinStore.swift; sourceTree = "<group>"; };
 		E4751514B333373A06054067 /* PrintMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintMessageHandler.swift; sourceTree = "<group>"; };
 		E4EB7AB988FD29B912E972E2 /* WebViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewScreen.swift; sourceTree = "<group>"; };
 		EF2B768C5BD7A6132C4A01A4 /* SoluPosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoluPosApp.swift; sourceTree = "<group>"; };
@@ -53,6 +100,17 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		2505B7D347A7040D8DFAC444 /* SoluPosTests */ = {
+			isa = PBXGroup;
+			children = (
+				6C00DE5065BC070D6A892FBE /* CodeInterpreterTests.swift */,
+				CFCE3627CA0ECD5D390D0A3D /* PinCryptoTests.swift */,
+				6C1BD6C60047596E9BF11B73 /* PriceLogicTests.swift */,
+				C632B0D6809AA52F33085162 /* ScanAndFormatTests.swift */,
+			);
+			path = SoluPosTests;
+			sourceTree = "<group>";
+		};
 		322F39EB378B7E463E9EAF06 /* Printing */ = {
 			isa = PBXGroup;
 			children = (
@@ -90,8 +148,10 @@
 				7A296D06B014E6AD5373449D /* PrivacyInfo.xcprivacy */,
 				EF2B768C5BD7A6132C4A01A4 /* SoluPosApp.swift */,
 				B5944111069805A2EF726C27 /* Data */,
+				B223AE0AD654BADD965B9127 /* PriceCheck */,
 				322F39EB378B7E463E9EAF06 /* Printing */,
 				3EF5E3F39C3F82C8FA9B3D99 /* Scanner */,
+				A24A79D76D06D07226174381 /* Security */,
 				9D876D316F5C510AC3A01B6B /* UI */,
 				FDE127B87F2AB0BD268A6A03 /* WebView */,
 			);
@@ -110,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				75D0BDF68538E80A5BB29985 /* SoluPos.app */,
+				BDB31274F3320334AE73A33E /* SoluPosTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,12 +185,41 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
+		A24A79D76D06D07226174381 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				04FDD6683814F5A731D5512F /* Keychain.swift */,
+				E0A127A8AE3A9A40A16AEB6C /* KioskPinStore.swift */,
+				8E1F27C0F7B190F655DBED8D /* PinCrypto.swift */,
+				327EA63DBE7DD1A6E1675323 /* TokenStore.swift */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
 		A5AD268F0001F76C2DF1E7EC = {
 			isa = PBXGroup;
 			children = (
 				7A03C83897FA2EF60348F36F /* SoluPos */,
+				2505B7D347A7040D8DFAC444 /* SoluPosTests */,
 				9210097B2263000170B1F3C3 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		B223AE0AD654BADD965B9127 /* PriceCheck */ = {
+			isa = PBXGroup;
+			children = (
+				D7ACD7A85D5459C83C4498B7 /* CodeInterpreter.swift */,
+				39643E6670AE299F2AEBC1C2 /* ContinuousScanner.swift */,
+				ABAA830CE156F9C6EB6BFECF /* DemoPriceLookupService.swift */,
+				C522A3A29DBD88649B40CF0B /* Features.swift */,
+				BC19D10F0A2B3A2D9D07E6D9 /* LookupResolver.swift */,
+				D48313B06E255D3B2C648A52 /* PriceCheckView.swift */,
+				27CB3672DF078522BCA35919 /* PriceFormat.swift */,
+				B299F0507F12C35328EF9DE6 /* PriceModels.swift */,
+				0B304A8C12DEF68E548588DC /* PriceResultSheet.swift */,
+				6A98240EB379AFEF6BA33486 /* ScanStabilizer.swift */,
+			);
+			path = PriceCheck;
 			sourceTree = "<group>";
 		};
 		B5944111069805A2EF726C27 /* Data */ = {
@@ -155,6 +245,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		99F47C4ACFD47CAF7B9EB205 /* SoluPosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4F306A6A52367BE526F3156 /* Build configuration list for PBXNativeTarget "SoluPosTests" */;
+			buildPhases = (
+				E14506E85338BD11E1E4D4A5 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				66A7DF6A003623AEE8AE2786 /* PBXTargetDependency */,
+			);
+			name = SoluPosTests;
+			packageProductDependencies = (
+			);
+			productName = SoluPosTests;
+			productReference = BDB31274F3320334AE73A33E /* SoluPosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E7B733E713929303C4FFFEB9 /* SoluPos */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1781BB66DC3DC084B52BF97E /* Build configuration list for PBXNativeTarget "SoluPos" */;
@@ -182,6 +290,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					99F47C4ACFD47CAF7B9EB205 = {
+						DevelopmentTeam = SW4UL7W5X4;
+						ProvisioningStyle = Automatic;
+					};
 					E7B733E713929303C4FFFEB9 = {
 						DevelopmentTeam = SW4UL7W5X4;
 						ProvisioningStyle = Automatic;
@@ -203,6 +315,7 @@
 			projectRoot = "";
 			targets = (
 				E7B733E713929303C4FFFEB9 /* SoluPos */,
+				99F47C4ACFD47CAF7B9EB205 /* SoluPosTests */,
 			);
 		};
 /* End PBXProject section */
@@ -226,27 +339,80 @@
 			files = (
 				03B411C3BF8C32A566FBAF86 /* BLEPrinterManager.swift in Sources */,
 				8A49C7689A71822252E96EB8 /* BarcodeInjector.swift in Sources */,
+				B4C77637B23B8E3D94AF79C2 /* CodeInterpreter.swift in Sources */,
 				1CE5F6DFE3B454BD570EEB87 /* ContentView.swift in Sources */,
+				612B1FA02E53F89F9F609334 /* ContinuousScanner.swift in Sources */,
+				581417D29EF82B0616BCBBB0 /* DemoPriceLookupService.swift in Sources */,
+				94763086C99A407DFCC261F2 /* Features.swift in Sources */,
+				12666DA8C43A261E903BB996 /* Keychain.swift in Sources */,
+				D94A633085B68B079CB59565 /* KioskPinStore.swift in Sources */,
+				4015ABF0DC1E77B94097BE1C /* LookupResolver.swift in Sources */,
 				102B2E25CF7A0CC66F2E91C0 /* POSWebView.swift in Sources */,
+				CC040531B3DC0C2F91ED0032 /* PinCrypto.swift in Sources */,
+				88678C082B3D00ABF650AC40 /* PriceCheckView.swift in Sources */,
+				1DE6EA0BA709F7B79B17A9C4 /* PriceFormat.swift in Sources */,
+				DBF85560F11EB1DFF0C1F9E6 /* PriceModels.swift in Sources */,
+				6D6424533D040DBB5EFAD013 /* PriceResultSheet.swift in Sources */,
 				920D2E679B27D4AC1D42D954 /* PrintMessageHandler.swift in Sources */,
 				7F9F3DBECF4FA20DABC5F669 /* PrinterConnectionState.swift in Sources */,
 				CB1EA9109CF9946E45BE4D3B /* PrinterSettingsView.swift in Sources */,
 				CED80279B5BB0A8EC872D408 /* ReceiptCapture.swift in Sources */,
+				8FF143B1F1BB4587F4C55D49 /* ScanStabilizer.swift in Sources */,
 				8796BE3FC743E28BA87704DD /* ScannerView.swift in Sources */,
 				29D8215D21D6B11B88D09FCA /* SoluPosApp.swift in Sources */,
 				E0138767F0A087DE7FC92E07 /* Store.swift in Sources */,
 				FB70CFED8BAA559B393F71CA /* StoreFormView.swift in Sources */,
 				0949538E29477790A0820046 /* StoreListView.swift in Sources */,
 				9AC793EE8A78FAA00498B1AA /* StoreRepository.swift in Sources */,
+				757943724E0996E0DFBC639B /* TokenStore.swift in Sources */,
 				A1E27E1D32DF7697BAEF5496 /* TutorialOverlay.swift in Sources */,
 				4D91D8A3273C7EDA9B136AD4 /* UserPreferences.swift in Sources */,
 				658EB789D9BE193C5EDB82A7 /* WebViewScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E14506E85338BD11E1E4D4A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91C25D854EFA9BCB94D6B604 /* CodeInterpreterTests.swift in Sources */,
+				CB9A49A37137881EBB4C085D /* PinCryptoTests.swift in Sources */,
+				6E1DE97A509BBFD28971A76F /* PriceLogicTests.swift in Sources */,
+				1071A83CE54E2514F4400EE7 /* ScanAndFormatTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		66A7DF6A003623AEE8AE2786 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E7B733E713929303C4FFFEB9 /* SoluPos */;
+			targetProxy = 59EF5EECCE60F2A8487396A9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		0F7DCEC63D0984FC02739D7F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = SW4UL7W5X4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.solupos.contenedor.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SoluPos.app/SoluPos";
+			};
+			name = Debug;
+		};
 		759BA6D33C7ED5A11372C759 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -303,6 +469,26 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A08E5032C087991F2EA37F61 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = SW4UL7W5X4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.solupos.contenedor.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SoluPos.app/SoluPos";
 			};
 			name = Release;
 		};
@@ -429,6 +615,15 @@
 			buildConfigurations = (
 				C16634120F70C5FA16047A34 /* Debug */,
 				759BA6D33C7ED5A11372C759 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C4F306A6A52367BE526F3156 /* Build configuration list for PBXNativeTarget "SoluPosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0F7DCEC63D0984FC02739D7F /* Debug */,
+				A08E5032C087991F2EA37F61 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

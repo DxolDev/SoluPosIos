@@ -11,6 +11,12 @@ struct WebViewScreen: View {
     @State private var webView: WKWebView?
     @State private var showScanner = false
     @State private var showTutorial = false
+    @State private var showPriceTip = false
+    @State private var frames: [String: CGRect] = [:]
+    // Consultador de precios dentro del POS
+    @State private var scannerForPrice = false
+    @State private var priceResult: PriceResultItem?
+    private let priceLookup: PriceLookupService = PriceLookupProvider.create()
     @State private var printOutcome: PrintOutcome?
     @State private var previewItem: PrintPreviewItem?
 
@@ -39,10 +45,12 @@ struct WebViewScreen: View {
             // mientras buscas un producto en el POS.
             floatingButtons
 
-            if showTutorial {
-                WebViewTutorialOverlay(onDismiss: {
-                    prefs.webViewTutorialSeen = true
+            if !posSteps.isEmpty {
+                TutorialOverlay(steps: posSteps, onFinish: {
                     showTutorial = false
+                    showPriceTip = false
+                    prefs.webViewTutorialSeen = true
+                    if Features.priceCheckEnabled { prefs.priceTipPosSeen = true }
                 })
             }
 
@@ -54,10 +62,15 @@ struct WebViewScreen: View {
             if showScanner {
                 ScannerView(
                     onResult: { barcode in
-                        injectBarcode(barcode)   // inyecta en el WebView vivo detrás
                         showScanner = false      // quita el overlay al instante
+                        if scannerForPrice {
+                            scannerForPrice = false
+                            lookupPrice(barcode)
+                        } else {
+                            injectBarcode(barcode)   // inyecta en el WebView vivo detrás
+                        }
                     },
-                    onCancel: { showScanner = false }
+                    onCancel: { showScanner = false; scannerForPrice = false }
                 )
                 .ignoresSafeArea()
             }
@@ -77,6 +90,7 @@ struct WebViewScreen: View {
                     }
                 } label: {
                     Image(systemName: "chevron.left")
+                        .tutorialTarget("back")
                 }
             }
         }
@@ -98,8 +112,25 @@ struct WebViewScreen: View {
                 onCancel: { previewItem = nil }
             )
         }
+        // Resultado del consultador: el item vive en @State (id estable), no se deriva en el binding.
+        .sheet(item: Features.priceCheckEnabled ? $priceResult : .constant(nil)) { item in
+            PriceResultSheet(
+                result: item.result,
+                scannedCode: item.code,
+                today: LocalDate.today(),
+                onClose: { priceResult = nil },
+                onScanAnother: {
+                    priceResult = nil
+                    scannerForPrice = true
+                    showScanner = true
+                }
+            )
+            .presentationDetents([.medium, .large])
+        }
+        .onPreferenceChange(TutorialFrames.self) { frames = $0 }
         .overlay(printOutcomeOverlay)
         .onAppear {
+            if Features.priceCheckEnabled && !prefs.priceTipPosSeen { showPriceTip = true }
             prefs.lastStoreId = store.id
             printHandler.onPrint = { [self] in
                 Task { await handlePrint() }
@@ -111,14 +142,35 @@ struct WebViewScreen: View {
     // MARK: - Floating buttons
 
     private var floatingButtons: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 8) {
             // El botón "volver a tiendas" del Android es innecesario en iOS:
             // el NavigationStack ya provee el botón atrás nativo (chevron).
+            // Consultar precio: botón pequeño sobre el del escáner (bottom 88 pt, end 24 pt).
+            if Features.priceCheckEnabled {
+            Button {
+                closeKeyboard()
+                scannerForPrice = true
+                showScanner = true
+            } label: {
+                Image(systemName: "tag.fill")
+                    .font(.system(size: 18))
+                    .frame(width: 40, height: 40)
+                    .background(Color(.systemBackground))
+                    .foregroundStyle(Color.brandBlue)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .shadow(radius: 4)
+            }
+            .accessibilityLabel("Consultar precio")
+            .tutorialTarget("price")
+            .padding(.trailing, 8)
+            }
+
             Button {
                 // Igual que Android: antes de abrir el escáner ocultamos el teclado
                 // y desenfocamos. El destino del escaneo NO se recuerda — lo resuelve
                 // el JS del inyector (primer input del POS) al momento de inyectar.
                 closeKeyboard()
+                scannerForPrice = false
                 showScanner = true
             } label: {
                 Image(systemName: "barcode.viewfinder")
@@ -129,6 +181,7 @@ struct WebViewScreen: View {
                     .clipShape(Circle())
                     .shadow(radius: 6)
             }
+            .tutorialTarget("scanner")
         }
         .padding(.trailing, 16)
         .padding(.bottom, 24)
@@ -164,6 +217,47 @@ struct WebViewScreen: View {
         guard let config = prefs.printerConfig else { return }
         let outcome = await printerManager.printBitmap(image, config: config)
         await MainActor.run { printOutcome = outcome }
+    }
+
+    // MARK: - Tutorial del POS
+
+    private var posSteps: [TutorialStep] {
+        var steps: [TutorialStep] = []
+        let priceStep = frames["price"].flatMap { f in
+            (Features.priceCheckEnabled && showPriceTip) ? TutorialStep(
+                title: "Consulta precios sin salir de la venta",
+                message: "Escanea un producto para ver su precio, su oferta y si hay existencia. No modifica el carrito.",
+                highlightFrame: f) : nil
+        }
+        if showTutorial, let scanner = frames["scanner"] {
+            steps.append(TutorialStep(
+                title: "Escanea productos",
+                message: "Toca este botón para escanear códigos de barras o QR con la cámara y agregarlos a la venta.",
+                highlightFrame: scanner))
+            if let priceStep { steps.append(priceStep) }
+            if let back = frames["back"] {
+                steps.append(TutorialStep(
+                    title: "Volver a tus tiendas",
+                    message: "Usa este botón para retroceder dentro del POS; si ya estás al inicio, vuelves a la lista de tiendas.",
+                    highlightFrame: back))
+            }
+        } else if !showTutorial, let priceStep {
+            steps.append(priceStep)
+        }
+        return steps
+    }
+
+    // MARK: - Consultador de precios
+
+    private func lookupPrice(_ barcode: String) {
+        let storeId = store.id
+        Task {
+            let query = CodeInterpreter.interpret(barcode)
+            let result: LookupResult = query == .unrecognized
+                ? .unrecognized
+                : await priceLookup.lookup(storeId: storeId, query: query)
+            priceResult = PriceResultItem(code: barcode, result: result)
+        }
     }
 
     // MARK: - Scanner injection
@@ -230,6 +324,12 @@ struct WebViewScreen: View {
 
 // MARK: - Helpers
 
+private struct PriceResultItem: Identifiable {
+    let id = UUID()
+    let code: String
+    let result: LookupResult
+}
+
 private struct PrintPreviewItem: Identifiable {
     let id = UUID()
     let image: UIImage
@@ -257,53 +357,6 @@ struct PrintPreviewSheet: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Imprimir", action: onConfirm)
                 }
-            }
-        }
-    }
-}
-
-struct WebViewTutorialOverlay: View {
-    let onDismiss: () -> Void
-
-    var body: some View {
-        ZStack {
-            Color.black.opacity(0.65).ignoresSafeArea()
-            VStack {
-                Spacer()
-                VStack(alignment: .leading, spacing: 16) {
-                    tutorialStep(
-                        icon: "barcode.viewfinder",
-                        title: "Escanear código",
-                        body: "Toca el botón azul para abrir la cámara y escanear un código de barras o QR. El código se inyecta directamente en el campo activo del POS."
-                    )
-                    Divider()
-                    tutorialStep(
-                        icon: "chevron.left",
-                        title: "Volver",
-                        body: "Usa el botón atrás para retroceder dentro del POS; si ya estás al inicio, vuelves a la lista de tiendas."
-                    )
-                    Button("Entendido") { onDismiss() }
-                        .buttonStyle(.borderedProminent)
-                        .frame(maxWidth: .infinity)
-                }
-                .padding(20)
-                .background(.regularMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .padding()
-            }
-        }
-        .onTapGesture(perform: onDismiss)
-    }
-
-    private func tutorialStep(icon: String, title: String, body: String) -> some View {
-        HStack(alignment: .top, spacing: 14) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundStyle(.blue)
-                .frame(width: 32)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title).font(.headline)
-                Text(body).font(.subheadline).foregroundStyle(.secondary)
             }
         }
     }

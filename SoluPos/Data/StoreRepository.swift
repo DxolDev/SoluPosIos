@@ -27,6 +27,20 @@ final class StoreRepository {
         try context.save()
     }
 
+    /// Tienda configurada como quiosco en este equipo (equivale a getKioskStore()).
+    func kioskStore() throws -> Store? {
+        var d = FetchDescriptor<Store>(predicate: #Predicate { $0.kioskMode == true })
+        d.fetchLimit = 1
+        return try context.fetch(d).first
+    }
+
+    /// Un equipo solo puede ser quiosco de una tienda.
+    func clearKioskExcept(id: String) throws {
+        let all = try context.fetch(FetchDescriptor<Store>(predicate: #Predicate { $0.kioskMode == true }))
+        for s in all where s.id != id { s.kioskMode = false }
+        try context.save()
+    }
+
     func delete(_ store: Store) throws {
         context.delete(store)
         try context.save()
